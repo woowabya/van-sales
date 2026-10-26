@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>VAN대리점 세일즈 표준 스크립트</title>
+<style>
+:root{
+  --bg1:#eef7f6; --bg2:#f3f4fb;
+  --card:#ffffff; --text:#1c2430; --muted:#667085; --border:#e3e8ee;
+  --mint:#2ac1bc; --mint-dk:#0f8480; --mint-ink:#064b48;
+  --picker-bg:linear-gradient(135deg,#d6f3f0 0%,#e4ecfb 55%,#efe6fb 100%);
+  --picker-bd:rgba(255,255,255,.9);
+  --glass-top:rgba(255,255,255,.95); --glass-bot:rgba(255,255,255,.58); --glass-bd:rgba(255,255,255,.9);
+  --glass-sh:0 1px 2px rgba(16,40,60,.10),0 8px 18px -8px rgba(16,90,100,.30);
+  --on-top:#27b9b4; --on-bot:#0e7f7b;
+  --info-bg:#e8f1ff; --info-tx:#1d4f91; --warn-bg:#fff6cf; --warn-tx:#7a5b00;
+  --ph-bg:#ffe2bd; --ph-tx:#7a3e00; --ok-bg:#d3f3df; --ok-tx:#0f5a2e;
+  --std:#0f8480; --std-bg:#e3f7f6; --std-bd:#a9e3e0;
+  --prm:#5b3fd1; --prm-bg:#efeaff; --prm-bd:#cfc3f7;
+  --side1:#2ec6c0; --side2:#0f8b87;
+  --detail-sh:0 1px 2px rgba(16,40,60,.06),0 18px 40px -18px rgba(16,60,90,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg1:#12181b; --bg2:#15161f;
+    --card:#1c2126; --text:#e8eaee; --muted:#9aa3b2; --border:#2f3640;
+    --mint:#35cfc9; --mint-dk:#5fe0db; --mint-ink:#d6fffd;
+    --picker-bg:linear-gradient(135deg,#17302f 0%,#1a2336 55%,#251d38 100%);
+    --picker-bd:rgba(255,255,255,.10);
+    --glass-top:rgba(255,255,255,.14); --glass-bot:rgba(255,255,255,.05); --glass-bd:rgba(255,255,255,.16);
+    --glass-sh:0 1px 2px rgba(0,0,0,.4),0 8px 18px -8px rgba(0,0,0,.6);
+    --info-bg:#182a44; --info-tx:#a9c8f5; --warn-bg:#3a3213; --warn-tx:#f1d98a;
+    --ph-bg:#5a3a14; --ph-tx:#ffd9a8; --ok-bg:#14412a; --ok-tx:#a8e8c3;
+    --std:#5fe0db; --std-bg:#143532; --std-bd:#266b67;
+    --prm:#b9a7ff; --prm-bg:#2a2250; --prm-bd:#4a3d96;
+    --side1:#14706d; --side2:#0b4745;
+    --detail-sh:0 1px 2px rgba(0,0,0,.4),0 18px 40px -18px rgba(0,0,0,.7);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;color:var(--text);
+  font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+  font-size:15px;line-height:1.65}
+button{font-family:inherit}
+.app{display:grid;grid-template-columns:268px minmax(0,1fr);gap:22px;max-width:1420px;margin:0 auto;padding:18px 22px;min-height:100vh}
+
+/* ───── 사이드바 (민트) ───── */
+.side{background:linear-gradient(175deg,var(--side1),var(--side2));color:#fff;padding:26px 18px;
+  position:sticky;top:18px;align-self:start;height:calc(100vh - 36px);overflow:auto;border-radius:26px;box-shadow:0 18px 36px -20px rgba(8,80,78,.55)}
+.side h1{font-size:17px;line-height:1.45;margin:0 0 18px;font-weight:800;letter-spacing:-.2px;text-shadow:0 1px 2px rgba(0,60,58,.3)}
+.nav button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;
+  border:1px solid rgba(255,255,255,.35);border-radius:16px;color:#fff;font:inherit;font-weight:600;cursor:pointer;
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.10));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 4px 10px -4px rgba(0,60,58,.4);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:transform .12s,box-shadow .12s,background .12s}
+.nav button:hover{background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,.16));transform:translateY(-1px)}
+.nav button:active{transform:scale(.98)}
+.nav button.on{background:linear-gradient(180deg,#fff,#e9fbfa);color:var(--mint-dk);border-color:#fff;font-weight:800;
+  box-shadow:inset 0 1px 0 #fff,0 8px 18px -6px rgba(0,60,58,.55)}
+.me{margin-top:24px;padding:16px 14px 14px;border-radius:20px;background:rgba(0,70,68,.28);
+  border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.me b{font-size:13px}
+.me b span{font-weight:400;opacity:.9}
+.me label{display:block;font-size:12px;opacity:.95;margin:12px 0 4px;font-weight:600}
+.me input{width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,.7);border-radius:12px;
+  background:rgba(255,255,255,.94);color:#1c2430;font:inherit;box-shadow:inset 0 1px 2px rgba(0,60,58,.15)}
+.me input:focus{outline:3px solid rgba(255,255,255,.55);border-color:#fff}
+.me small{display:block;margin-top:12px;opacity:.9;font-size:12px;line-height:1.5}
+
+main{padding:14px 10px 70px;min-width:0}
+h2.title{font-size:24px;margin:0 0 4px;letter-spacing:-.3px}
+.sub{color:var(--muted);font-size:13.5px;margin:0 0 18px}
+
+/* ───── 아이폰 느낌 유리 버튼 ───── */
+.gbtn{position:relative;border:1px solid var(--glass-bd);color:var(--text);cursor:pointer;font:inherit;
+  background:linear-gradient(180deg,var(--glass-top),var(--glass-bot));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(0,0,0,.04),var(--glass-sh);
+  backdrop-filter:blur(12px) saturate(1.5);-webkit-backdrop-filter:blur(12px) saturate(1.5);
+  transition:transform .12s ease,box-shadow .15s ease,background .15s ease}
+.gbtn:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 #fff,0 2px 4px rgba(16,40,60,.1),0 14px 24px -10px rgba(16,110,110,.45)}
+.gbtn:active{transform:translateY(0) scale(.97)}
+.gbtn:focus-visible{outline:3px solid rgba(42,193,188,.5);outline-offset:2px}
+.gbtn.on{color:#fff;font-weight:800;text-shadow:0 1px 1px rgba(0,60,58,.35);border-color:rgba(255,255,255,.55);
+  background:linear-gradient(180deg,var(--on-top),var(--on-bot));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 4px rgba(0,60,58,.25),0 10px 20px -8px rgba(15,132,128,.75)}
+.gbtn.on::after{content:"";position:absolute;left:8%;right:8%;top:2px;height:42%;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,0));pointer-events:none}
+
+/* ───── 위쪽 '선택 영역' 과 아래쪽 '내용 영역' 구분 ───── */
+.picker{background:var(--picker-bg);border:1px solid var(--picker-bd);border-radius:26px;padding:16px 18px 18px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 10px 24px -16px rgba(30,90,110,.4)}
+.plabel{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;letter-spacing:.4px;color:var(--mint-dk);margin:0 0 10px;text-transform:none}
+.plabel::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.25)}
+.picker > * + .plabel{margin-top:18px}
+.link{display:flex;justify-content:center;margin:-2px 0}
+.link i{display:block;width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-top:12px solid var(--mint);
+  filter:drop-shadow(0 3px 3px rgba(15,132,128,.3));margin:-1px 0 -10px;position:relative;z-index:2}
+.detail{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--border);border-radius:26px;
+  padding:28px 24px 24px;margin-top:6px;box-shadow:var(--detail-sh)}
+.detail::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--mint),#6fe0db)}
+.detail.std::before{background:linear-gradient(90deg,var(--std),#52d3cd)} .detail.prm::before{background:linear-gradient(90deg,#5336c9,#9a80ff)}
+.dhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 6px}
+.dtag{display:inline-block;padding:3px 11px;border-radius:999px;font-size:12px;font-weight:800;color:var(--mint-dk);
+  background:#e4f8f6;border:1px solid #b6ebe8;
+  background:color-mix(in srgb,var(--mint) 16%,var(--card));border-color:color-mix(in srgb,var(--mint) 45%,var(--card))}
+h3.step{font-size:20px;margin:0;white-space:pre-wrap;letter-spacing:-.2px}
+.goal{margin:8px 0 12px;white-space:pre-wrap;color:var(--muted)}
+.goal b{color:var(--text)}
+
+/* 통화 흐름 단계 버튼 */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.sbtn{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:999px;font-weight:700;font-size:14px;text-align:left;line-height:1.3;min-height:48px}
+.sbtn .no{flex:none;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
+  font-size:13px;font-weight:800;color:var(--mint-dk);background:linear-gradient(180deg,#fff,#d7f4f2);
+  box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(15,100,100,.3)}
+.sbtn.on .no{color:var(--mint-dk);text-shadow:none;background:linear-gradient(180deg,#fff,#dffaf8)}
+.sbtn .nm{min-width:0}
+
+/* 반응별 대응 */
+.cats{display:flex;flex-wrap:wrap;gap:8px}
+.cbtn{padding:9px 16px;border-radius:999px;font-size:14px;font-weight:600}
+.search{width:100%;padding:12px 16px;border:1px solid var(--glass-bd);border-radius:999px;background:rgba(255,255,255,.8);color:var(--text);font:inherit;margin:2px 0 0;
+  box-shadow:inset 0 1px 3px rgba(16,60,90,.12)}
+@media (prefers-color-scheme: dark){.search{background:rgba(255,255,255,.08)}}
+.search:focus{outline:3px solid rgba(42,193,188,.45);border-color:transparent}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 12px}
+.rgroups{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-items:start}
+.rgroup{display:flex;flex-direction:column;gap:9px;border-radius:24px;padding:10px 10px 12px;
+  background:rgba(127,127,127,.08);background:color-mix(in srgb,var(--c1) 12%,transparent);
+  border:2px solid rgba(127,127,127,.3);border-color:color-mix(in srgb,var(--c1) 50%,transparent)}
+.rghead{display:flex;align-items:center;gap:8px;padding:2px 4px 0}
+.rghead .gp{padding:5px 14px;border-radius:999px;color:#fff;font-weight:800;font-size:14px;
+  background:linear-gradient(180deg,var(--c1),var(--c2));text-shadow:0 1px 1px rgba(0,0,0,.3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 3px 7px -2px rgba(0,0,0,.35)}
+.rghead .gp .ge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#fff;margin:0 6px 0 -8px;font-size:13px;vertical-align:middle;text-shadow:none;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.rghead small{margin-left:auto;font-weight:800;font-size:12px;color:var(--muted)}
+.rgroup .rbtn.on{background:linear-gradient(180deg,var(--c1),var(--c2));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 4px rgba(0,0,0,.18),0 10px 20px -8px var(--c2)}
+.rgroup .rbtn.on .rn{color:var(--c2)}
+.cbtn .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:1px;
+  background:linear-gradient(180deg,var(--on-top),var(--on-bot));box-shadow:0 0 0 2px rgba(255,255,255,.8)}
+.cbtn.on .dot{background:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+.rbtn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 14px;border-radius:20px;min-height:62px}
+.rbtn .rn{flex:none;min-width:46px;text-align:center;padding:5px 0;border-radius:999px;font-size:13px;font-weight:800;color:#fff;
+  background:linear-gradient(180deg,var(--c1,#27b9b4),var(--c2,#0e7f7b));box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 2px 5px -1px rgba(0,0,0,.25);text-shadow:0 1px 1px rgba(0,0,0,.25)}
+.rbtn .rt{min-width:0}
+.rbtn b{display:block;font-size:14px;line-height:1.35}
+.rbtn span.tg{display:block;font-size:12px;opacity:.75;margin-top:2px;line-height:1.4}
+.rbtn.on .rn{background:linear-gradient(180deg,#fff,#dffaf8);color:var(--mint-dk);text-shadow:none}
+.rbtn.on span.tg{opacity:.92}
+.rbtn.on b,.rbtn.on span.tg{position:relative;z-index:1}
+.goto{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 4px}
+.goto .rbtn{padding:8px 12px;min-height:46px;border-radius:16px;font-size:13px}
+.goto .rbtn b{font-size:13px}
+.glabel{margin:18px 0 6px;font-weight:800;font-size:14px}
+
+/* 내용 박스 */
+.box{background:linear-gradient(180deg,rgba(42,193,188,.05),rgba(42,193,188,.02));border:1px solid var(--border);border-left:4px solid var(--mint);
+  border-radius:16px;padding:15px 18px;margin:12px 0;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}
+.box h4{margin:0 0 6px;font-size:14px;white-space:normal;color:var(--mint-dk)}
+.callouts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.callout{border-radius:16px;padding:14px 16px;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}
+.callout b{display:block;margin-bottom:4px}
+.callout.info{background:var(--info-bg);color:var(--info-tx)}
+.callout.warn{background:var(--warn-bg);color:var(--warn-tx)}
+mark.ph{background:var(--ph-bg);color:var(--ph-tx);border-radius:6px;padding:0 5px}
+mark.ph.ok{background:var(--ok-bg);color:var(--ok-tx)}
+.copy{float:right;margin:-2px 0 8px 10px;padding:7px 15px;border-radius:999px;font-size:13px;font-weight:700;color:var(--mint-dk)}
+.empty{color:var(--muted);padding:12px 0;grid-column:1/-1}
+
+/* ───── 스타터팩 비교 ───── */
+.meta{background:var(--info-bg);color:var(--info-tx);border-radius:16px;padding:12px 16px;white-space:pre-wrap;margin-bottom:16px;font-size:13.5px}
+.seg{display:inline-flex;gap:8px;flex-wrap:wrap}
+.seg .gbtn{padding:10px 20px;border-radius:999px;font-weight:700}
+.seg .gbtn.s-std.on{background:linear-gradient(180deg,#27b9b4,#0e7f7b)}
+.seg .gbtn.s-prm.on{background:linear-gradient(180deg,#8a6bff,#5336c9);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 4px rgba(40,20,120,.3),0 10px 20px -8px rgba(83,54,201,.75);text-shadow:0 1px 1px rgba(30,10,100,.4)}
+.cmp-head{display:grid;grid-template-columns:150px 1fr 1fr;gap:14px;margin:0 0 12px;position:sticky;top:0;z-index:5;padding-top:2px}
+.cmp-head div{padding:12px 16px;border-radius:18px;font-weight:800;font-size:16px;text-align:center;color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 10px 20px -10px rgba(0,0,0,.35);text-shadow:0 1px 1px rgba(0,0,0,.25)}
+.cmp-head .h-std{background:linear-gradient(180deg,#27b9b4,#0e7f7b)}
+.cmp-head .h-prm{background:linear-gradient(180deg,#8a6bff,#5336c9)}
+.cmp-head .h-k{background:none;box-shadow:none;color:var(--muted);text-shadow:none;font-size:13px;display:flex;align-items:flex-end;justify-content:center}
+.prow{display:grid;grid-template-columns:150px 1fr 1fr;gap:14px;margin:12px 0}
+.prow .k{display:flex;align-items:flex-start;gap:8px;font-weight:800;padding:14px 4px 0 2px;line-height:1.35}
+.prow .k .ic{font-size:20px;line-height:1.2}
+.cell{border-radius:18px;padding:14px 16px;background:var(--card);border:1px solid var(--border);box-shadow:0 1px 2px rgba(16,40,60,.05);overflow-wrap:anywhere;word-break:keep-all}
+.cell.std{background:linear-gradient(180deg,var(--std-bg),var(--card) 70%);border-color:var(--std-bd)}
+.cell.prm{background:linear-gradient(180deg,var(--prm-bg),var(--card) 70%);border-color:var(--prm-bd)}
+.cell.both{grid-column:2 / 4;background:linear-gradient(90deg,var(--std-bg),var(--prm-bg));border-color:var(--border)}
+.cell p{margin:0 0 5px}.cell p:last-child{margin-bottom:0}
+.cell ul{margin:0 0 5px;padding:0;list-style:none}
+.cell li{position:relative;padding-left:15px;margin:3px 0}
+.cell li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--mint)}
+.cell.prm li::before{background:var(--prm)}
+.cell strong{font-weight:800}
+.cell.std strong{color:var(--std)} .cell.prm strong{color:var(--prm)}
+.cell .note{font-size:12.5px;color:var(--muted)}
+.cell .tip{background:var(--warn-bg);color:var(--warn-tx);border-radius:10px;padding:6px 10px;font-weight:700}
+.cell .none{color:var(--muted);font-weight:600}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:800;margin:0 0 6px;
+  background:linear-gradient(180deg,#fff,#eee9ff);color:var(--prm);border:1px solid var(--prm-bd);box-shadow:inset 0 1px 0 #fff}
+.pill.same{background:linear-gradient(180deg,#fff,#e6f7f6);color:var(--mint-dk);border-color:var(--std-bd)}
+@media (prefers-color-scheme: dark){.pill{background:#2a2250}.pill.same{background:#143532}}
+.one .prow{grid-template-columns:150px 1fr}
+.one .cell.wide{grid-column:2}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .app{padding:0;gap:0;display:block}
+  .side{position:static;height:auto;padding:18px 16px;border-radius:0;box-shadow:none}
+  .nav{display:flex;gap:8px;flex-wrap:wrap}.nav button{width:auto;margin:0;padding:10px 14px}
+  main{padding:20px 14px 50px}
+  .steps,.goto{grid-template-columns:1fr 1fr}
+  .grid,.callouts,.rgroups{grid-template-columns:1fr}
+  .cmp-head{display:none}
+  .prow,.one .prow{grid-template-columns:1fr;gap:8px}
+  .prow .k{padding:6px 0 0}
+  .cell.both,.one .cell.wide{grid-column:auto}
+  .cell[data-l]::before{content:attr(data-l);display:block;font-size:12px;font-weight:800;margin-bottom:4px;color:var(--std)}
+  .cell.prm[data-l]::before{color:var(--prm)}
+}
+
+/* ───── 차분한 버전 공통 (.calm) ───── */
+.calm{--picker-bg:#f1f6f6;--picker-bd:var(--border)}
+@media (prefers-color-scheme: dark){.calm{--picker-bg:#1a2224}}
+.calm .side{background:#129a95;box-shadow:0 10px 24px -16px rgba(8,80,78,.5)}
+.calm .side h1{text-shadow:none}
+.calm .nav button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:12px}
+.calm .nav button:hover{background:rgba(255,255,255,.2);transform:none}
+.calm .nav button.on{background:#fff;color:#0c6f6b;box-shadow:0 2px 6px rgba(0,50,48,.25)}
+.calm .me{background:rgba(0,60,58,.22);box-shadow:none;border-radius:14px}
+.calm .me input{border-radius:10px;box-shadow:none}
+.calm .picker{border-radius:18px;box-shadow:none}
+.calm .detail{border-radius:18px;box-shadow:0 1px 3px rgba(16,40,60,.08)}
+.calm .detail::before{height:4px}
+.calm .gbtn{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--card);border:1px solid var(--border);box-shadow:0 1px 2px rgba(16,40,60,.07)}
+.calm .gbtn:hover{transform:none;border-color:var(--mint);box-shadow:0 2px 8px rgba(16,40,60,.10)}
+.calm .gbtn:active{transform:scale(.99)}
+.calm .gbtn.on{color:#fff;text-shadow:none;background:var(--on-bot);border-color:var(--on-bot);box-shadow:0 2px 8px rgba(15,100,96,.30)}
+.calm .gbtn.on::after{display:none}
+.calm .sbtn,.calm .rbtn{border-radius:12px}
+.calm .cbtn,.calm .seg .gbtn{border-radius:10px}
+.calm .copy{border-radius:10px}
+.calm .sbtn .no{background:#e4f5f4;box-shadow:none}
+.calm .sbtn.on .no{background:#fff}
+.calm .rbtn .rn{background:var(--c2,var(--on-bot));box-shadow:none;text-shadow:none;border-radius:8px}
+.calm .rbtn.on .rn,.calm .rgroup .rbtn.on .rn{background:#fff;color:var(--c2,var(--mint-dk))}
+.calm .rgroup .rbtn.on{background:var(--c2);border-color:var(--c2);box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.calm .rghead .gp{background:var(--c2);box-shadow:none;text-shadow:none;border-radius:8px;font-size:13.5px}
+.calm .search{border-radius:12px;box-shadow:none;background:var(--card);border:1px solid var(--border)}
+.calm .box,.calm .callout,.calm .cell,.calm .meta{border-radius:12px}
+.calm .box{background:var(--card)}
+.calm .cell{box-shadow:none}
+.calm .cell.std{background:var(--std-bg)} .calm .cell.prm{background:var(--prm-bg)}
+.calm .cell.both{background:linear-gradient(90deg,var(--std-bg),var(--prm-bg))}
+.calm .cmp-head div{box-shadow:none;text-shadow:none;border-radius:12px}
+.calm .cmp-head .h-std{background:var(--std)} .calm .cmp-head .h-prm{background:var(--prm)}
+.calm .cmp-head .h-k{background:none}
+.calm .seg .gbtn.s-prm.on{background:var(--prm);border-color:var(--prm);box-shadow:0 2px 8px rgba(83,54,201,.3);text-shadow:none}
+.calm .seg .gbtn.s-std.on{background:var(--std);border-color:var(--std)}
+.calm .ic{display:none}
+.calm .prow .k{padding-top:14px}
+.calm .pill{box-shadow:none}
+.calm .link i{filter:none}
+
+/* ① 민트 한 가지 색 */
+.v-mint .cbtn .dot,.v-list .cbtn .dot{display:none}
+.v-mint .rgroup{background:var(--card);border:1px solid var(--border);border-radius:16px}
+.v-mint .rghead{border-bottom:1px solid var(--border);padding:2px 4px 8px}
+.v-mint .rghead .gp{background:none;color:var(--text);padding:0;font-size:15px}
+.v-mint .rghead small{background:#e4f5f4;color:var(--mint-dk);padding:2px 10px;border-radius:999px}
+@media (prefers-color-scheme: dark){.v-mint .rghead small{background:#173a39}}
+
+/* ② 차분한 톤다운 컬러 */
+.v-muted .rgroup{background:rgba(127,127,127,.06);background:color-mix(in srgb,var(--c1) 9%,var(--card));
+  border:1px solid rgba(127,127,127,.3);border-color:color-mix(in srgb,var(--c1) 40%,transparent);border-radius:16px}
+
+/* ③ 담백한 목록형 */
+.v-list .rgroups{gap:20px 36px}
+.v-list .rgroup{background:none;border:0;padding:0;gap:0;border-radius:0}
+.v-list .rghead{border-bottom:2px solid var(--text);padding:0 2px 6px;margin-bottom:2px}
+.v-list .rghead .gp{background:none;color:var(--text);padding:0;font-size:15px}
+.v-list .rbtn{border:0;border-bottom:1px solid var(--border);border-radius:0;background:none;box-shadow:none;min-height:0;padding:10px 6px}
+.v-list .rbtn:hover{background:rgba(42,193,188,.07);border-color:var(--border)}
+.v-list .rbtn .rn{background:none;color:var(--mint-dk);min-width:36px;padding:0;text-align:left;font-size:13px}
+.v-list .rbtn.on .rn,.v-list .rgroup .rbtn.on .rn{background:none;color:var(--mint-dk)}
+.v-list .rgroup .rbtn.on{background:rgba(127,127,127,.1);background:color-mix(in srgb,var(--mint) 14%,transparent);color:var(--text);border:0;border-bottom:1px solid var(--border);border-left:3px solid var(--mint);box-shadow:none}
+.v-list .goto .rbtn{border:1px solid var(--border);border-radius:10px}
+
+/* ───── 알록달록 아이폰 느낌 그대로 + 컬러만 톤다운 (.soft) ───── */
+@media not (prefers-color-scheme: dark){
+  .soft{
+    --mint:#4fb5b0; --mint-dk:#2b8782; --on-top:#55b7b2; --on-bot:#2a847f;
+    --side1:#55b9b4; --side2:#2f8a86;
+    --picker-bg:linear-gradient(135deg,#e2f0ee 0%,#e7ecf5 55%,#eee9f4 100%);
+    --info-bg:#eaf0f8; --info-tx:#33557f; --warn-bg:#faf2d8; --warn-tx:#6b5420;
+    --ph-bg:#f4dfc4; --ph-tx:#6d4318; --ok-bg:#d9eee0; --ok-tx:#1f5a38;
+    --std:#2f8a86; --std-bg:#e8f4f3; --std-bd:#b7d9d6;
+    --prm:#6a5aae; --prm-bg:#f0edf8; --prm-bd:#d3cbe9;
+    --bg1:#f1f6f5; --bg2:#f4f4f9;
+  }
+  .soft .seg .gbtn.s-std.on,.soft .cmp-head .h-std{background:linear-gradient(180deg,#4aa8a3,#2b7d79)}
+  .soft .seg .gbtn.s-prm.on,.soft .cmp-head .h-prm{background:linear-gradient(180deg,#8576c4,#5d4d9f)}
+  .soft .seg .gbtn.s-prm.on{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 4px rgba(40,30,100,.25),0 10px 20px -8px rgba(93,77,159,.6)}
+  .soft .detail::before{background:linear-gradient(90deg,var(--mint),#8ccfcb)}
+  .soft .detail.std::before{background:linear-gradient(90deg,#2f8a86,#7cc6c1)}
+  .soft .detail.prm::before{background:linear-gradient(90deg,#5d4d9f,#a79bd8)}
+  .soft .gbtn.on{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 4px rgba(20,70,68,.25),0 10px 20px -8px rgba(43,125,121,.6)}
+  .soft .cbtn .dot{box-shadow:0 0 0 2px rgba(255,255,255,.85)}
+}
+
+/* ───── 슬림 (.slim) : 같은 느낌, 덩치만 줄이기 ───── */
+.slim{font-size:14px;line-height:1.55}
+@media (min-width:861px){
+  .slim .app{grid-template-columns:216px minmax(0,1fr);max-width:1290px;gap:20px}
+  .slim main{padding:10px 8px 50px}
+}
+.slim .side{padding:20px 14px}
+.slim .side h1{font-size:15px;margin-bottom:14px}
+.slim .nav button{padding:9px 12px;margin-bottom:6px;font-size:14px;border-radius:13px}
+.slim .me{margin-top:18px;padding:12px 12px 10px;border-radius:16px}
+.slim .me label{margin:9px 0 3px;font-size:11.5px}
+.slim .me input{padding:7px 10px;border-radius:10px;font-size:13.5px}
+.slim .me small{font-size:11px;margin-top:8px}
+.slim h2.title{font-size:21px}
+.slim .sub{font-size:12.5px;margin-bottom:12px}
+.slim .picker{padding:11px 14px 13px;border-radius:20px}
+.slim .plabel{font-size:11.5px;margin-bottom:8px}
+.slim .picker > * + .plabel{margin-top:13px}
+.slim .steps{gap:8px}
+.slim .sbtn{padding:7px 12px;min-height:40px;font-size:13.5px;gap:8px}
+.slim .sbtn .no{width:22px;height:22px;font-size:12px}
+.slim .cats{gap:6px}
+.slim .cbtn{padding:6px 13px;font-size:13px}
+.slim .cbtn .dot{width:8px;height:8px;margin-right:6px}
+.slim .search{padding:8px 14px;font-size:13.5px}
+.slim .rgroups{gap:10px}
+.slim .rgroup{padding:8px 8px 9px;border-radius:18px;border-width:1.5px;gap:6px}
+.slim .rghead .gp{padding:3px 11px;font-size:13px}
+.slim .rghead .gp .ge{width:18px;height:18px;font-size:11px;margin:0 5px 0 -6px}
+.slim .rghead small{font-size:11px}
+.slim .rbtn{padding:7px 11px;min-height:46px;border-radius:14px;gap:10px}
+.slim .rbtn .rn{min-width:40px;padding:3px 0;font-size:12px}
+.slim .rbtn b{font-size:13.5px;line-height:1.3}
+.slim .rbtn span.tg{font-size:11.5px;margin-top:1px;line-height:1.35}
+.slim .goto{gap:6px}
+.slim .goto .rbtn{min-height:36px;padding:5px 10px;border-radius:12px}
+.slim .glabel{margin:14px 0 4px;font-size:13px}
+.slim .link i{border-left-width:9px;border-right-width:9px;border-top-width:9px;margin-bottom:-8px}
+.slim .detail{padding:22px 20px 18px;border-radius:20px;margin-top:4px}
+.slim .detail::before{height:4px}
+.slim .dhead{gap:8px;margin-bottom:4px}
+.slim .dtag{padding:2px 9px;font-size:11.5px}
+.slim h3.step{font-size:18px}
+.slim .goal{margin:6px 0 9px;font-size:13.5px}
+.slim .box{padding:10px 14px;border-radius:12px;margin:9px 0;border-left-width:3px}
+.slim .box h4{font-size:13px;margin-bottom:3px}
+.slim .callouts{gap:10px;margin-top:10px}
+.slim .callout{padding:10px 14px;border-radius:12px}
+.slim .copy{padding:5px 12px;font-size:12.5px}
+.slim .meta{padding:9px 14px;font-size:12.5px;margin-bottom:12px;border-radius:12px}
+.slim .seg{gap:6px}
+.slim .seg .gbtn{padding:6px 16px;font-size:13.5px}
+.slim .cmp-head{grid-template-columns:142px 1fr 1fr;gap:10px;margin-bottom:8px}
+.slim .cmp-head div{padding:8px 12px;font-size:14px;border-radius:14px}
+.slim .prow{grid-template-columns:142px 1fr 1fr;gap:10px;margin:8px 0}
+.slim .one .prow{grid-template-columns:142px 1fr}
+.slim .prow .k{padding:10px 2px 0;font-size:13.5px;gap:6px}
+.slim .prow .k .ic{font-size:17px}
+.slim .cell{padding:10px 13px;border-radius:14px;font-size:13.5px}
+.slim .cell li{margin:2px 0}
+.slim .cell p{margin-bottom:3px}
+.slim .pill{font-size:11px;padding:1px 9px;margin-bottom:4px}
+/* 그림자·반짝임도 가볍게 */
+.slim .gbtn{box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 1px 2px rgba(16,40,60,.09),0 4px 10px -6px rgba(16,90,100,.28)}
+.slim .gbtn:hover{transform:translateY(-1px)}
+.slim .gbtn.on{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 3px rgba(20,70,68,.25),0 5px 12px -6px rgba(43,125,121,.6)}
+.slim .detail{box-shadow:0 1px 2px rgba(16,40,60,.06),0 10px 24px -16px rgba(16,60,90,.28)}
+@media (max-width:860px){.slim .cmp-head{display:none}.slim .prow,.slim .one .prow{grid-template-columns:1fr}}
+
+/* ───── 통화 흐름 ① ③ / 스타터팩 구분점 ───── */
+.box.list{white-space:normal}
+.box.list p{margin:0 0 5px}
+.bl{list-style:none;margin:0 0 4px;padding:0}
+.bl li{position:relative;padding-left:18px;margin:5px 0}
+.bl li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--mint)}
+.bl li.sub{margin-left:18px;font-size:.93em;color:var(--muted)}
+.bl li.sub::before{width:6px;height:6px;background:transparent;border:1.5px solid var(--mint);top:.6em}
+.rxwrap .rxintro{margin:0 0 10px}
+.rxwrap .rxintro p{margin:0 0 2px}
+.inlink{background:none;border:0;padding:0;font:inherit;font-weight:800;color:var(--mint-dk);cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
+.inlink:hover{background:color-mix(in srgb,var(--mint) 16%,transparent);border-radius:4px}
+.rxsec{margin:10px 0 0}
+.rxgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px 8px}
+.rxgrid.one{grid-template-columns:1fr}
+.rxrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:7px 12px 7px 9px;min-height:40px;border-radius:14px}
+.rxrow:disabled{cursor:default}
+.rxdot{flex:none;width:8px;height:8px;border-radius:50%;background:linear-gradient(180deg,var(--c1),var(--c2))}
+.rxt{flex:1;min-width:0;font-size:13.5px;line-height:1.4}
+.rxchip{flex:none;min-width:46px;text-align:center;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.25);
+  background:linear-gradient(180deg,var(--c1),var(--c2));box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
+.prow .k .ic:empty{display:none}
+.cell li.note{font-size:12.5px;color:var(--muted)}
+.cell li.none{color:var(--muted);font-weight:600}
+.cell.both li::before{background:linear-gradient(90deg,var(--mint) 50%,var(--prm) 50%)}
+@media (max-width:860px){.rxgrid{grid-template-columns:1fr}}
+
+/* ───── 접기 시안 ───── */
+.rgitems{display:flex;flex-direction:column;gap:6px}
+.chev{display:inline-block;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .15s;margin:0 3px 2px}
+.chev.o,.fstep[open]>summary .chev{transform:rotate(45deg)}
+.rgroups.acc{grid-template-columns:1fr;gap:8px}
+.acc .rgitems{display:grid;grid-template-columns:1fr 1fr;gap:7px 8px}
+.rghead.fh{width:100%;background:none;border:0;cursor:pointer;font:inherit;color:var(--text);padding:2px 4px;text-align:left}
+.rghead.fh small{margin-left:auto;margin-right:8px}
+.rgroup.fold:not(.open){padding:7px 9px}
+.rgroup.fold:not(.open) .rghead{padding:0 4px}
+.pbrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pbrow .rn{min-width:50px;text-align:center;padding:4px 0;border-radius:999px;font-size:13px;font-weight:800;color:#fff;
+  background:linear-gradient(180deg,var(--c1),var(--c2));box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 2px 5px -1px rgba(0,0,0,.25);text-shadow:0 1px 1px rgba(0,0,0,.25)}
+.pbt{flex:1;min-width:200px}.pbt b{display:block;font-size:14.5px;line-height:1.35}.pbt .tg{font-size:12px;color:var(--muted)}
+.pbbtn{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;font-weight:700;font-size:13.5px}
+.qtoggle{margin-left:auto;display:inline-flex;align-items:center;gap:6px}
+.foldbar{display:flex;justify-content:flex-end;margin:4px 0 0}
+.fbtn{padding:5px 13px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--mint-dk)}
+.fstep{border:1px solid var(--border);border-left:3px solid var(--mint);border-radius:12px;background:var(--card);margin:9px 0;overflow:hidden}
+.fstep summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;cursor:pointer;font-weight:800;font-size:13.5px;color:var(--mint-dk)}
+.fstep summary::-webkit-details-marker{display:none}
+.fstep .fb{padding:0 14px 12px;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}
+.fstep.pt{background:var(--warn-bg);border-color:transparent;border-left-color:#d8b04a}
+.fstep.pt summary,.fstep.pt .fb{color:var(--warn-tx)}
+@media (max-width:860px){.acc .rgitems{grid-template-columns:1fr}}
+
+/* ───── 반응 선택 버튼을 알약(캡슐) 모양으로 : 카테고리 접기 버전 ───── */
+.rgroups.acc .rgitems{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px}
+.rgroups.acc .rbtn{width:auto;max-width:100%;min-height:0;padding:7px 16px 7px 14px;border-radius:999px;gap:8px;align-items:center}
+.rgroups.acc .rbtn .rn{min-width:0;padding:0;background:none;box-shadow:none;text-shadow:none;color:var(--c2);font-size:13px;border-radius:0}
+.rgroups.acc .rbtn .rt{display:block}
+.rgroups.acc .rbtn b{display:inline;font-size:14px;font-weight:700}
+.rgroups.acc .rbtn .tg{display:none}
+.rgroups.acc .rgroup .rbtn.on,.rgroups.acc .rbtn.on{background:linear-gradient(180deg,var(--c1),var(--c2));color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.25)}
+.rgroups.acc .rbtn.on .rn,.rgroups.acc .rgroup .rbtn.on .rn{background:none;color:#fff;box-shadow:none}
+@media (max-width:860px){.rgroups.acc .rgitems{display:flex}}
+
+.rtray{border-radius:18px;padding:12px 12px 12px;background:rgba(127,127,127,.08);background:color-mix(in srgb,var(--c1) 12%,transparent);
+  border:1.5px solid rgba(127,127,127,.3);border-color:color-mix(in srgb,var(--c1) 45%,transparent)}
+.rtray .rgitems{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px}
+.rgroups.acc{grid-template-columns:1fr;gap:0}
+.picker #qwrap{margin-top:13px}
+</style>
+
+
+
+
+
+
+
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <h1>VAN대리점<br>세일즈 표준 스크립트</h1>
+    <nav class="nav" id="nav"></nav>
+    <div class="me">
+      <b>내 정보 <span>(스크립트에 자동 반영)</span></b>
+      <label for="agency">대리점명</label><input id="agency" autocomplete="off">
+      <label for="manager">담당자명</label><input id="manager" autocomplete="off">
+      <label for="phone">본인 연락처</label><input id="phone" autocomplete="off">
+      <small>입력한 내용은 이 화면에서만 쓰이며 저장·전송되지 않습니다. 새로고침하면 사라집니다.</small>
+    </div>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<script id="data" type="application/json">{"flow": {"title": "배민 입점 세일즈 RP 스크립트 (전체 통화 흐름)", "steps": [{"name": "① 통화 전 준비", "goal": "가게 파악 (10초)", "script": "· 다른 배달앱(쿠팡이츠 등) 입점 여부\n· ☑️ 배민배달 가능지역 여부 확인 (업무관리시트 '배민1플러스 불가지역' 탭에서 확인)\n└  가능해야 스타터팩 적용 가능. 아닐 경우 배민배달 외의 서비스로 입점 권유\n· 점심·저녁 피크 시간대는 피해서 전화\n└ 통화 권장 시간 : 오전 10~11시, 오후 3~5시 (피크/브레이크타임 피하기)", "next": "② 오프닝", "point": ""}, {"name": "② 오프닝", "goal": "통화 허락 + 한 줄 소개", "script": "안녕하세요 사장님, 배달의민족 입점 상담 도와드리는 [대리점명] [담당자명]입니다. \n혹시 1분만 통화 괜찮으실까요?\n\n다름이 아니라, 처음 배민 시작하시는 사장님들께 14일 동안 중개이용료를 지원해드리는 프로모션이 있어서 연락드렸어요.", "next": "· → ③ 사장님 첫 반응 확인\n· 바로 '바빠요' → R6", "point": "처음부터 \n중개이용료를 지원해준다는 멘트로 집중시키기"}, {"name": "③ 사장님 \n첫 반응", "goal": "반응을 듣고 맞는 대응으로 이동\n(대부분 거절로 시작)", "script": "사장님 반응에 따라 바로 넘어가기\n(이에 대한 자세한 내용은 🧐반응별 대응 시트탭 에서 구체적으로 확인 가능)\n\n[부정반응]\n· 배달 생각 없어요 / 배달은 할 생각이 없어요 → R1\n· 우리 음식(업종)은 배달에 안 맞아요 → R2\n· 그냥 안 할래요 / 생각해볼게요 (이유 없이 거부) → R3\n· 지금도 괜찮아요 / 단골 위주라 굳이 → R4\n· 홀 안정되고 나면 / 오픈 초기라 정신없어요 → R5\n· 지금 (통화가) 정신이 없어서요 → R6\n· 쿠팡(다른 앱)으로도 충분해요 → R7\n· 메뉴 아직 준비 안 됐어요 → R8\n· 아직 사업자등록증도 안 나왔어요 → R9\n· 수수료 떼면 남는 게 있을지 → R10\n· 월세·고정비 부담돼요 → R11\n· 예전에 해봤는데 효과 없었어요 → R12\n· 예전에 해봤는데 너무 힘들었어요 (운영·포장) → R13\n\n[긍정반응]\n· 어떤 건데요? / 관심 있어요 → ④ 3종 소개", "next": "· 부정반응 → ‘반응별 대응’ 탭\n· 긍정반응 → ④", "point": "반응을 끝까지 듣고 바로 반박하지 않기\n대부분의 거절은 ‘아직’이라는 뜻 → 맞는 R로 연결"}, {"name": "④ 3종 소개", "goal": "관심 있거나\n혹은\n반응별 대응으로 수긍한 경우\n스타터팩 3종 가볍게 소개", "script": "배민배달, 픽업, 우리가게클릭 세 가지를 한 번에 같이 시작하시는 거예요.\n\n▶ 배민배달 : 배달은 배민이 알아서 해드려서 배달 기사를 따로 안 구하셔도 돼요.\n▶ 픽업 : 가게 근처 손님이 앱으로 주문하고 직접 가지러 와서, 포장 주문도 같이 받으실 수 있어요. 앱에 노출시키려는 홍보용으로도 많이들 사용하세요.\n▶ 우리가게클릭(스마트모드) : 손님이 배민에서 가게를 찾아볼 때, 사장님 가게가 목록 위쪽 광고 자리에 보이게 해주는 광고예요. 광고비는 스마트모드로 켜두시면 시스템이 알아서 가장 효율적으로 맞춰드려서, 사장님이 따로 신경 쓰실 필요가 없어요. \n▶ 혜택 : 처음 14일 동안 배민배달·픽업 중개이용료를 서울은 50%, 서울 외 지역은 100% 지원해드리고, 우리가게클릭 광고비도 30일 동안 최대 10만원까지 돌려드려요.", "next": "· 더 관심 있어 하면 → ⑤\n· 바로 신청 → ⑥\n· 다시 망설이면 → 해당 반응의 ④ 마무리", "point": "3가지를 함께 시작하면 혜택이 적용된다는 점 강조 (중개이용료 14일 지원 + 우리가게클릭 최대 10만원)"}, {"name": "⑤ 프리미엄 안내", "goal": "관심 있는 사장님께만 추가 안내\n(부담 주지 않기)", "script": "▶ 더 관심 있어 하시면 : 혹시 처음부터 손님을 좀 더 빨리 모으고 싶으시면, 여기에 즉시할인을 더하는 프리미엄도 있어요. 즉시할인은 손님 주문 금액에서 바로 할인해주는 건데, 다음 달 즉시할인 비용을 최대 10만원까지 배민이 같이 부담해드려요.\n\n▶ 부담스러워하시면 : 네, 그럼 세 가지로 먼저 가볍게 시작하셔도 충분해요.", "next": "· 원하시면 → ⑥ 프리미엄 신청\n· 부담 → ⑥ 스탠다드 신청\n\n첫 계약 시 선택한 혜택으로만 적용 가능하며,\n라이브 후에는 스탠다드 > 프리미엄으로 변경 불가 (라이브 전에는 변경 가능)", "point": "관심 보일 때만 꺼내고 부담 주지 않기"}, {"name": "⑥ 클로징", "goal": "스탠다드 신청 받기\n(원하시면 프리미엄)", "script": "▶ 스탠다드 : 그럼 오늘 신청 먼저 해둘까요? 전자계약서 한 장으로 배민배달·픽업·우리가게클릭 세 가지를 한 번에 같이 신청해드릴게요.\n\n▶ 프리미엄을 원하시면 : 즉시할인까지 같은 계약서에 넣어서 한 번에 신청해드릴게요.\n\n▶ 스타터팩이 부담되시면 : 말 그대로 새롭게 시작하시는 사장님들을 위한 혜택이라, 스타터팩으로 시작하시는 게 혜택 면에서는 가장 유리해요. 그래도 부담되시면 필요하신 서비스만 골라서 먼저 이용해보실 수도 있어요. 다만 이렇게 따로 시작하시면 스타터팩 혜택은 적용되지 않아요.\n\n▶ 거절 시 : 네, 알겠습니다. 그럼 [ㅇㅇ일 뒤]에 한 번만 더 연락드려도 될까요?", "next": "· 수락 → ⑦\n· 필요한 서비스만 원하면 → 전자계약서 '광고·서비스 개별 신청' (스타터팩 혜택 없음을 꼭 안내)\n· 거절 → 재통화 일정 등록", "point": "스타터팩 혜택이 가장 유리하다는 점을 강조하며,\n스탠다드를 우선적으로 이끌어내기\n(개별 서비스 신청 시에는 스타터팩 혜택이 없다는 점 안내)"}, {"name": "⑦ 후속 안내", "goal": "신청 감사 + 안내 메시지 발송 예고\n(통화에서는 열거하지 않기)", "script": "신청 감사합니다! \n혜택 받으실 때 꼭 확인하셔야 할 내용이 몇 가지 있는데요, 제가 보기 편하게 정리해서 카톡이나 문자로 보내드릴게요.\n궁금하신 건 언제든 편하게 연락 주세요.", "next": "· 통화 종료 후 아래 ‘후속 안내 메시지’를 카톡 or 문자로 발송", "point": "통화에서는 길게 설명하지 않기\n자세한 내용은 메시지로"}, {"name": "📩 후속 안내 메시지", "goal": "통화 후 카톡·문자로 발송\n(클레임 방지)", "script": "[배달의민족 스타터팩(신규 성장 패키지) 안내]\n사장님, 오늘 통화 감사합니다. 혜택 놓치지 않으시도록 아래 내용을 꼭 확인해 주세요.\n\n1. 혜택 기간 : 배민배달 광고 시작일부터 14일\n2. 중개이용료 혜택은 서울 50%, 서울 외 지역 100% 지원됩니다.\n3. 14일 동안 배민배달·픽업·우리가게클릭을 모두 켜두고 이용하셔야 해요.\n   · 픽업이나 우리가게클릭을 끄면 혜택이 멈춰요.\n   · 배민배달을 끄면 혜택이 완전히 끝나요.\n   · 우리가게클릭은 스마트모드와 노출을 켜두셔야 혜택 적용되며,이전에 첫 이용 혜택을 받으셨던 경우는 제외됩니다.\n4. (프리미엄) 즉시할인도 꺼지 않게 유지해 주세요. 다음 달 초, 셀프서비스 > [지원받기] 버튼을 꼭 눌러주셔야 지원 돼요.\n5. 혜택이 끝난 뒤에도 광고를 켜두시면 그때부터 중개이용료와 광고비는 사장님 부담이에요.\n6. 메뉴와 원산지는 광고 시작 전에 셀프서비스에서 꼭 확인·수정해 주세요.\n\n입점 준비는 보통 2,3일 길게는 1주일정도 소요됩니다. 궁금하신 점은 배달의민족 고객센터(1600-2111) 혹은 해당 번호 [본인 연락처]로 연락 주세요.\n\n[대리점명] [담당자명] 드림", "next": "· 통화 직후 바로 발송", "point": "4번은 프리미엄 신청한 사장님에게만 발송하면 됨"}]}, "reactions": {"title": "사장님 반응별 대응 (통화 중 빠르게 찾기 가능)", "index": [{"id": "R1", "cat": "💢 강한 거부감", "label": "배달 생각 없어요 (배달 진행 의사 없음)", "tag": "입점비·위약금 0원, 배달은 배민배달이. 놓치던 추가 매출을 만드는 거예요"}, {"id": "R2", "cat": "💢 강한 거부감", "label": "우리 음식(업종)은 배달에 안 맞아요", "tag": "같은 업종 배달 잘하는 매장 많아요. 메뉴 구성만 조정하면 충분해요"}, {"id": "R3", "cat": "💢 강한 거부감", "label": "그냥 안 할래요 / 생각해볼게요", "tag": "진짜 이유부터 끌어내기. 이유가 나오면 그 포인트만 공략"}, {"id": "R4", "cat": "🤔 필요성", "label": "지금도 괜찮아요 (단골 위주)", "tag": "단골만으론 새 손님이 잘 안 늘어요. 홀은 그대로, 창구 하나 더"}, {"id": "R5", "cat": "⏰ 타이밍", "label": "홀 안정되고 나면 / 오픈 초기라 정신없어요", "tag": "루틴 잡히기 전인 지금이 오히려 시간 내기 쉬워요. 최소 세팅으로 시작"}, {"id": "R6", "cat": "⏰ 타이밍", "label": "지금 (통화가) 정신이 없어서요", "tag": "설득하지 말고 재통화 시간만 확정"}, {"id": "R7", "cat": "📱 기존 채널", "label": "쿠팡(다른 앱)으로도 충분해요", "tag": "겹치지 않는 손님층이 있어요. 주문 받는 곳을 하나 더"}, {"id": "R8", "cat": "📄 준비 상황", "label": "메뉴 아직 준비 안 됐어요", "tag": "메뉴판 사진이나 대표 메뉴 2~3가지면 준비 끝. 추후 수정 가능 안내"}, {"id": "R9", "cat": "📄 준비 상황", "label": "사업자등록증 아직이에요", "tag": "등록증 나오는 날에 맞춰 재연락 약속 (구체적으로 잡으면 좋음)"}, {"id": "R10", "cat": "💰 비용 부담", "label": "수수료 떼면 남는 게 있을지", "tag": "첫 14일 중개이용료 지원으로 먼저 체험. 그 뒤엔 매출 구간별 상생요금제"}, {"id": "R11", "cat": "💰 비용 부담", "label": "월세·고정비 부담돼요", "tag": "고정비는 어차피 나가요. 배달은 그 위에 얹히는 여윳돈"}, {"id": "R12", "cat": "↩️ 과거 경험", "label": "예전에 해봤는데 효과 없었어요", "tag": "정률제로 바뀌어 지금은 여러 가게가 고루 노출돼요"}, {"id": "R13", "cat": "↩️ 과거 경험", "label": "예전에 해봤는데 너무 힘들었어요 (운영·포장)", "tag": "힘들었던 부분을 물어보고, 지금 개선된 점과 용기 구매 방법으로 답변"}], "cards": {"R1": {"header": "사장님 : “배달 생각 없어요” / “배달은 할 생각이 없어요”   ·  💢 강한 거부감", "steps": [["① 공감·질문", "네, 배달까지 하시려면 신경 쓸 게 많으시죠. 혹시 배달 기사 구하는 거나 포장 용기 같은 게 걱정되세요?"], ["② 답변", "그 부분은 배민배달이 맡아드려요. 배달 기사는 배민이 연결해드려서 사장님은 음식만 준비하시면 돼요. 입점 비용도 없고, 중간에 그만두셔도 해지비나 위약금이 없어서 편하게 보시고 판단하시면 돼요.\n요즘에는 뭐 먹을지 고민될 때 일단 배민앱부터 들어가 보시는 분들이 정말 많은데, 그 손님들은 지금 사장님 가게를 볼 수가 없는 상태예요. 홀 매출을 나누는 게 아니라, 놓치던 추가 매출을 새로 만드는 거예요."], ["③ 재확인", "배달은 직접 안 하셔도 되고 부담 없이 시작하실 수 있는데, 한번 해보시고 판단하시는 건 어떠세요?"], ["④ 그래도 거절하면", "네, 그럼 무리하게 권하진 않을게요. \n혹시 나중에 배달 생각 드시면 그때 편하게 연락 주세요."], ["💡 포인트", "· 입점 허들부터 제거 : 입점 비용 0원, 해지 위약금 0원\n· ‘홀 매출을 나누는 게 아니라 놓치던 추가 매출을 만드는 것’\n· 주방·직원 부담 → 영업시간을 한가한 시간대 위주로, 대표 메뉴 2~3가지"]]}, "R2": {"header": "사장님 : “우리 음식은 배달하면 맛이 변해서 안 돼요” / “우리 업종은 배달이 안 맞아요”   ·  💢 강한 거부감", "steps": [["① 공감·질문", "맞아요, 그 말씀 충분히 이해돼요. 따뜻할 때 바로 드셔야 맛있는 메뉴시죠?"], ["② 답변", "사장님, 이 업종으로 배달 운영 잘하고 계신 매장들 정말 많아요.\n요즘은 포장 방식도 잘 나와 있어서, 면 요리는 면과 육수를 따로 담으면 민원이 거의 없고, 보온·보냉 용기나 소스를 따로 담는 방식도 많이 쓰세요."], ["③ 재확인", "그럼 배달에 자신 있는 메뉴 2~3가지만 골라서 먼저 시작해보실래요?"], ["④ 그래도 거절하면", "네, 알겠습니다. 혹시 배달해볼 만한 메뉴 생기시면 그때 편하게 연락 주세요."], ["💡 포인트", "· 포장 방식으로 안심시키기 (면·육수 분리, 보온·보냉 용기)\n· ‘메뉴 구성은 사장님 재량’, ‘다들 안 올리는 메뉴일수록 경쟁이 적어 눈에 띈다’ 는 점을 강조\n· 용기 구매가 부담이면 → R13 (배민상회)"]]}, "R3": {"header": "사장님 : “그냥 안 할래요” / “생각해볼게요” (이유를 말하지 않음)   ·  💢 강한 거부감", "steps": [["① 공감·질문", "네, 알겠습니다. 혹시 어떤 부분이 제일 마음에 걸리시는지 여쭤봐도 될까요? 수수료 걱정이신지, 배달 운영이 걱정이신지요."], ["② 답변", "말씀해주시는 부분에 맞춰서 그 부분만 설명드릴게요.\n▶ 준비가 부담되시면 : 저희가 준비를 도와드리는 매니저라서, 저랑 같이 상의하시면서 한번 준비해 보시면 돼요.\n▶ 손님 반응이 걱정되시면 : 안 좋은 반응보다 좋은 반응 보여주시는 손님들을 단골로 만드는 게 장사잖아요. 오픈하셔서 의욕 있으실 때 알려두시는 게 결국 제일 잘했다고 느끼실 거예요.\n▶ 리뷰가 걱정되시면 : 사장님 음식에 자신 있으시잖아요. 손님들이 드셔봐야 알죠. 혜택이 가장 크게 나오는 처음 시작할 때 같이 해보시고, 혹시 반응이 안 좋으면 그때 판단하셔도 늦지 않아요."], ["③ 재확인", "그럼 그 부분만 해결되면 한번 해볼 만하실까요?"], ["④ 그래도 거절하면", "네, 알겠습니다. 혹시 생각 정리되시면 그때 편하게 연락 주세요."], ["💡 포인트", "· 거부 이유 파악이 최우선 — 진짜 이유를 먼저 끌어내기\n· 이유를 말씀하시면 그 포인트만 집중 공략 (수수료 → R10 / 배달 운영 → R1 / 메뉴 → R2 / 준비 → R8)\n· 예전에 해봤던 사장님이면 ‘그때 어떤 부분이 가장 안 맞으셨는지’부터 (→ R12, R13)"]]}, "R4": {"header": "사장님 : “지금도 괜찮아요” / “단골 위주라 굳이…”   ·  🤔 필요성", "steps": [["① 공감·질문", "다행이에요, 장사가 잘되고 계신다니 좋네요. 혹시 손님들은 주로 단골이세요, 아니면 지나가다 들어오시는 분들이 많으세요?"], ["② 답변", "단골이 탄탄하시면 매출은 안정적이시겠지만, 반대로 새 손님이 늘어날 여지는 크지 않다는 뜻이기도 해요. \n배민은 아직 사장님 가게를 모르는 동네 손님들을 만나는 창구라고 보시면 돼요.\n요즘에는 뭐 먹을지 고민될 때 일단 배민앱부터 들어가 보시는 분들이 정말 많은데, 동네 분들도 마찬가지일 거거든요.\n홀은 지금처럼 하시고, 한가한 시간에 앱으로 들어오는 주문을 추가로 받으신다고 보시면 돼요."], ["③ 재확인", "새 손님 받는 창구를 하나 열어둔다고 생각하시면 어떠세요?"], ["④ 그래도 거절하면", "네, 알겠습니다. \n이 혜택은 처음 시작하실 때 한 번만 받으실 수 있는 거라, 혹시 생각 바뀌시면 그때 꼭 연락 주세요."], ["💡 포인트", "· 바로 반박하지 말고, 손님 구성(단골 vs 신규)을 물어서 ‘신규 유입의 한계’ 공략\n· 홀은 그대로, 추가 매출 관점으로 전환\n· 수수료 걱정 → R10 / 되돌리기 걱정 → 메뉴·영업시간은 언제든 조절 가능"]]}, "R5": {"header": "사장님 : “홀 안정되고 나면 하려구요” / “오픈 초기라 정신없어요”   ·  ⏰ 타이밍", "steps": [["① 공감·질문", "맞아요, 오픈 초기엔 신경 쓸 게 한두 가지가 아니시죠. 오픈하신 지는 얼마나 되셨어요?"], ["② 답변", "그런데 사장님, 오히려 지금이 시간 내기는 더 쉬울 때예요. 홀 손님 루틴이 자리 잡기 전이라 시간을 유연하게 쓰실 수 있는데, 단골 루틴이 잡히고 나면 배달 세팅할 여유가 더 안 나오더라고요.\n그리고 오픈 초기에 동네 손님들께 가게를 알리는 데 배민이 도움이 많이 돼요. 앱에서 보고 홀로 찾아오시는 분들도 있고요. 그래서 우리가게클릭이 같이 들어가 있어요."], ["③ 재확인", "스타터팩 혜택은 처음 시작하실 때 한 번만 받으실 수 있는 거라, 오픈 초기에 같이 쓰시면 가게 알리는 데 도움이 돼요. 첫 14일 중개이용료 지원이랑 우리가게클릭 최대 10만원까지 지원을 받으면서 시작하실 수 있어요."], ["④ 그래도 거절하면", "네, 그럼 언제쯤 여유 생기실 것 같으세요? 그때 맞춰서 다시 한 번 연락드릴게요.\n→ 재연락 날짜 확정"], ["💡 포인트", "· ‘정신없다’는 거절이라기보다 우선순위 문제인 경우가 많음\n· 루틴이 안 잡힌 지금이 오히려 시간 내기 쉬움\n· 진입장벽 낮추기 : 대표 메뉴 2~3가지, 메뉴 사진은 배민 보유 이미지로 최소 세팅\n· 서류만 주시면 전자계약서는 담당자가 작성해서 발송\n· 주방 부담 걱정 → 영업시간 설정을 홀이 한가한 시간대 위주로 (광고를 끄는 것 X)"]]}, "R6": {"header": "사장님 : “지금 정신이 없어서요” (통화 자체가 어려움)   ·  ⏰ 타이밍", "steps": [["① 공감·질문", "아이고, 바쁘신데 죄송해요. 그럼 [오늘 오후 ㅇㅇ시 / 내일 오전] 중에 언제 다시 연락드릴까요?"], ["② 답변", "그때 1분이면 되니까 짧게 말씀드릴게요."], ["③ 재확인", "재통화 시간 확정 후 종료"], ["④ 그래도 거절하면", "네, 알겠습니다. 바쁘신데 전화 받아주셔서 감사합니다."], ["💡 포인트", "· 설득하지 말고 재통화 시간 확정\n· 오픈 초기라 바쁘다는 뜻이면 R5로"]]}, "R7": {"header": "사장님 : “쿠팡으로도 충분해요” / “이미 다른 배달앱 쓰고 있어요”   ·  📱 기존 채널", "steps": [["① 공감·질문", "쿠팡이츠 쓰고 계시는구나, 이미 배달을 해보셨으니 시작하시기 훨씬 수월하시겠어요. 거기서 주문은 어느 정도 들어오세요?"], ["② 답변", "배달앱마다 주로 쓰는 손님층이 좀 달라요. 배민앱만 쓰시는 손님들도 꽤 계셔서, 배민에 가게가 없으면 그분들은 사장님 가게를 아예 못 보시는 거에요.\n쿠팡은 그대로 두시고 주문 받는 곳을 하나 더 늘린다고 보시면 돼요. 쿠팡 이용중이시니 포장이나 라이더 응대는 이미 익숙하실테고, 메뉴도 지금이랑 똑같이 쓰시면 돼요."], ["③ 재확인", "두 군데에서 같이 받으시면 어떨지 한번 해보실래요? 지금 시작하시면 스타터팩 혜택으로 초반 부담 없이 배민 손님 반응부터 보실 수 있어요."], ["④ 그래도 거절하면", "네, 지금 바로 정하시진 않으셔도 돼요. 혹시 쿠팡이랑 같이 쓰실 생각 드시면 그때 편하게 연락 주세요."], ["💡 포인트", "· ‘배민이 더 낫다’ 비교 X → ‘겹치지 않는 손님층이 있다’로 안내\n· 관리가 번거롭다고 하면 → 기존 채널 셋팅 그대로 하시되, 채널만 하나 추가되는 것임을 강조"]]}, "R8": {"header": "사장님 : “메뉴 아직 준비 안 됐어요”   ·  📄 준비 상황", "steps": [["① 공감·질문", "아, 오픈 준비하시느라 정신없으시죠. 혹시 대표 메뉴 몇 개는 정해지셨어요? 오픈은 언제쯤 예정이세요?"], ["② 답변", "메뉴판 사진만 보내주시면 바로 준비해드릴 수 있어요. 메뉴판이 아직 없으시면 대표 메뉴, 주력 메뉴 2~3가지만 말씀해주셔도 일단 광고 준비는 돼요. 라이브 전에 사장님이 셀프서비스에서 직접 수정하시면 되고요.\n메뉴랑 원산지는 손님이 제일 먼저 보는 중요한 정보라, 시작 전에 꼭 한 번 확인해 주세요."], ["③ 재확인", "그럼 메뉴판 사진이나 대표 메뉴 2~3가지만 알려주시면, 신청이랑 시작일은 오픈 날짜에 맞춰 먼저 잡아둘까요?"], ["④ 그래도 거절하면", "네, 그럼 메뉴 정리되실 즈음에 다시 연락드릴게요. 언제쯤이면 괜찮으세요?\n→ 재연락 날짜 확정 (오픈 예정일 메모)"], ["💡 포인트", "· 메뉴판 사진만 있으면 바로 준비 가능\n· 메뉴판이 없으면 대표·주력 메뉴 2~3가지로 광고 준비 → 라이브 전 사장님이 셀프서비스로 직접 수정\n· 사진은 배민 보유 이미지 사용 가능\n· 원산지도 라이브 전에 반드시 정확히 입력하도록 안내"]]}, "R9": {"header": "사장님 : “아직 사업자등록증도 안 나왔어요”   ·  📄 준비 상황", "steps": [["① 공감·질문", "아, 아직 준비 중이시구나. 오픈 준비하시느라 바쁘시겠어요. 혹시 사업자등록증은 언제쯤 나올 예정이세요?"], ["② 답변", "등록증 나오면 바로 신청하실 수 있게 제가 그때 맞춰서 다시 연락드릴게요. 이 혜택은 처음 시작하시는 사장님들을 위한 거라, 등록증 나오고 시작하셔도 받으실 수 있어요.\n그 사이에 대표 메뉴랑 가게 사진 정도만 미리 준비해두시면 등록증 나오자마자 바로 진행하실 수 있어요."], ["③ 재확인", "그럼 등록증 나오는 날 즈음에 다시 한 번 연락드려도 될까요?"], ["④ 그래도 거절하면", "네, 등록증 나오면 편하게 연락 주셔도 되고요, 저도 그 때 맞추어서 한 번 연락드릴게요.\n→ 재연락 날짜 확정 (등록증 발급 예정일 메모)"], ["💡 포인트", "· 사업자등록증이 있어야 계약서 작성 가능 → 등록증 전에는 계약 진행 불가\n· 거절이 아니라 ‘아직’ 상황 → 재컨택 약속이 목표\n· 등록증 발급 예정일과 오픈 예정일 메모\n· 그사이 준비할 것(메뉴·사진)을 알려주면 다음 통화가 쉬워짐"]]}, "R10": {"header": "사장님 : “수수료 떼면 남는 게 있을지 모르겠어요”   ·  💰 비용 부담", "steps": [["① 공감·질문", "맞아요, 배민 입점 말씀드리면 다들 제일 먼저 걱정하시는 게 수수료예요. 혹시 어떤 부분이 제일 마음에 걸리세요?"], ["② 답변", "그래서 처음 시작하시는 사장님들께 스타터팩이라는 지원 프로그램을 운영하고 있어요. 배민배달·픽업 광고 시작하시고 2주 동안 중개이용료를 서울은 50%, 서울 외 지역은 100% 지원해드리고, 우리가게클릭 광고비도 30일 동안 최대 10만원까지 지원해드려요.\n그 기간 동안 주문이 얼마나 들어오는지, 배달로 남는 게 있는지 직접 보고 판단하실 수 있어요."], ["③ 재확인", "지금 큰 결정을 하시라는 게 아니라, 부담 없이 먼저 경험해보시는 거예요. 한번 해보실래요?"], ["④ 그래도 거절하면", "네, 알겠습니다. 혹시 수수료 구조가 더 궁금하시면 그때 편하게 연락 주세요."], ["💡 포인트", "· ‘부담 없이 먼저 체험’ 할 수 있다는 내용으로 강조\n· 혜택 끝난 뒤가 걱정이면 → 상생요금제 : 매출 구간별 요율 (상위 35% 7.8% / 중위 6.8% / 하위 20% 2.0%), 신규 매장은 낮은 구간일 수 있음. 2028/02/25까지 운영"]]}, "R11": {"header": "사장님 : “월세에 나가는 게 많은데 배달까지 하면 더 빠듯해요”   ·  💰 비용 부담", "steps": [["① 공감·질문", "매달 임대료만 해도 부담이 크실 텐데, 배달까지 하면 돈이 더 들어갈까 봐 걱정되시는 거죠?"], ["② 답변", "그 마음 충분히 이해돼요. 그런데 임대료나 관리비 같은 고정비는 배달을 하든 안 하든 매달 똑같이 나가잖아요. 배달을 추가한다고 그 고정비가 늘어나진 않아요. 가입비나 월정액 같은 고정비도 따로 없고요.\n지금 인원 그대로, 홀 손님 받으시던 여력 안에서 주문 몇 건 더 받는 구조라 한가한 시간에 받으시는 거라 부담이 적어요. 이미 나가는 돈 위에 여윳돈을 더 만든다고 생각해보세요."], ["③ 재확인", "딱 필요한 만큼만 최소로 시작해보시고, 여윳돈이 실제로 생기는지 한번 확인해보시죠."], ["④ 그래도 거절하면", "네, 알겠습니다. 혹시 생각 바뀌시면 그때 편하게 연락 주세요."], ["💡 포인트", "· 현재 인원으로 충분히 가능한 점을 강조\n· ‘직원 월급 한 번 더’, ‘가족 외식비’처럼 크게 와닿을 수 있는 내용으로 소구\n· 수수료 걱정이 이어지면 R10(상생요금제)과 이어 붙이기"]]}, "R12": {"header": "사장님 : “예전에 배민 해봤는데 돈만 나가고 주문이 없었어요”   ·  ↩️ 과거 경험", "steps": [["① 공감·질문", "매출 효과를 못 보셔서 실망이 정말 크셨겠네요. 혹시 그때 어떤 방식으로 운영하셨는지 여쭤봐도 될까요?"], ["② 답변", "예전에는 광고비를 많이 쓰는 매장이 주문을 가져가는 구조였다면, 지금은 정률제로 바뀌면서 여러 사장님들이 고루 매출을 올리고 계세요. 월 고정비나 입점 비용이 전혀 없고 중도 해지비나 위약금도 없습니다."], ["③ 재확인", "이번엔 혜택 받으면서 부담 없이 다시 한 번 해보시는 거 어떠세요?"], ["④ 그래도 거절하면", "네, 알겠습니다. 혹시 다시 해보실 생각 드시면 그때 편하게 연락 주세요."], ["💡 포인트", "· 실망을 먼저 받아주고, 그때 어떻게 운영했는지 묻기 (공감하기)\n· ‘깃발 꽂았는데 주문 없었다’ → 지금은 깃발 도배에 밀려 노출이 안 되는 구조가 아님 (정률제)\n· 재가입도 과거 스타터팩 혜택 이력이 없고 최근 7일 광고 이력이 없으면 대상 (전자계약서에서 확인)\n· 효과보다 운영이 힘들었던 경험이면 → R13"]]}, "R13": {"header": "사장님 : “예전에 해봤는데 너무 힘들었어요” (배차·고객센터·포장 등 운영 피로)   ·  ↩️ 과거 경험", "steps": [["① 공감·질문", "예전에 운영하시면서 많이 힘드셨군요. 혹시 어떤 부분이 제일 힘드셨는지 여쭤봐도 될까요? 배차 지연이나 고객센터 응대, 포장 용기 같은 부분이셨을까요?"], ["② 답변", "그 부분은 지금 많이 개선됐어요. 배차 시간도 라이더 충원으로 크게 단축됐고, 고객센터도 빠르게 연결돼요.\n포장 용기 때문에 번거로우셨다면, 배민상회에서 메뉴에 맞는 용기를 한 번에 보고 사실 수 있고요. \n그리고 라이브 전까지는 제가 사장님 매장을 계속 챙기는 담당자라, 문제가 생기면 관련 부서에 바로 문의해서 빠르게 처리되도록 도와드릴게요."], ["③ 재확인", "이번엔 제가 옆에서 챙겨드릴 테니, 혜택 받으시면서 다시 한 번 해보시는 거 어떠세요?"], ["④ 그래도 거절하면", "네, 알겠습니다. 혹시 다시 해보실 생각 드시면 그때 편하게 연락 주세요."], ["💡 포인트", "· 과거에 어떤 부분이 힘들었는지 구체적으로 파악 (배차 지연 / 고객센터 / 수수료 / 포장 용기)\n· 말씀하신 원인에 맞춰 개선된 점으로 답변 (배차 시간 단축, 빠른 고객센터 연결)\n· 용기·포장 부담 → 배민상회 구매 추천\n· 예전에 처리가 불만족스러웠다면 → 힘들었음을 공감 후 ‘계속 챙겨드리는 담당자’ 로 과거와 다른 경험을 약속\n· 수수료가 원인이면 R10, 주문효과가 원인이면 R12"]]}}}, "pack": {"title": "스타터팩(신규 성장 패키지) 핵심 정보", "meta": "💠기준일 : 2026.10.23 │ 정책 버전 : 스타터팩 Phase 2 (2026.8.3~ 적용)\n💠출처 : 스타터팩 세일즈 핸드북 (2026.07.21 최신화) / PS 세일즈 가이드북", "header": ["구분", "스탠다드", "프리미엄"], "rows": [["구성 (모두 필수)", "배민배달(배민1플러스) + 픽업 + 우리가게클릭(스마트모드)\n3종 모두 필수", "스탠다드 3종 + 즉시할인\n4종 모두 필수"], ["중개이용료 지원", "배민배달·픽업 14일\n서울 50% / 서울 외 100%\n주문 발생 시 자동 차감", "스탠다드와 동일"], ["우리가게클릭 지원", "스마트모드 30일 광고비 합산, 최대 10만원\n익월 말 정산계좌로 페이백\n※ 과거 우리가게클릭 첫이용 혜택을 받은 업주는 제외", "스탠다드와 동일"], ["즉시할인 지원", "없음", "최대 10만원 배민 코펀딩 (익월 1개월)\n당월 말일까지 4종 유지 시 지급\n사장님이 '지원 받기' 버튼을 눌러야 지급 (미클릭 시 누락)\n최초 진입 시 프리미엄으로 가입한 경우에만 제공"], ["가입 조건", "· OD 오픈지역 내 당월 신규·재가입 업주\n· 최초 계약서 한 장에 필수 상품 모두 포함\n· 신청 시점 최근 7일간 광고 이력 없음 (업주의 모든 가게 기준)\n· 스타터팩 혜택 이력 없음 (업주 기준 생애 1회)", "스탠다드 조건 +\n즉시할인 : 모든 주문금액 1,000원 이상 정액할인, 알뜰·한집배달 전용, 월말까지 유지\n\n* 11/2 부터 2,000원 이상 할인 시 적용 가능"], ["혜택 기간 기준", "배민배달(OD) 라이브 당일을 1일차로 하여 14일간 혜택 적용\n픽업·우리가게클릭이 늦게 시작해도 종료일은 동일\n→ ⭐계약서 작성 시 세 가지 시작일을 같은 날로 맞추기(가장 권장)", "스탠다드와 동일"], ["유지 조건 (14일)", "· 배민배달(OD) 해지 → 혜택 완전 종료, 재신청 불가\n· 픽업 또는 우리가게클릭 해지 → 일시 중지 (다시 켜면 재개, 기간 연장 없음)\n· 우리가게클릭은 스마트모드 ON + 노출 ON 유지", "스탠다드 조건 +\n· 즉시할인도 유지 판정에 포함 (즉시할인만 꺼도 혜택 중지)"], ["적용 불가 / 유의", "· 일부만 계약하고 라이브 후 나머지 추가 → 불가 (현장 실수 1위)\n· 양도양수 가게 → 불가\n· 가게가 여러 개면 처음 광고 승인된 1개 가게에만 적용\n· 혜택 종료 후 광고를 해지하지 않으면 이후 중개이용료·광고비는 사장님 부담\n· 필요한 서비스만 원하면 전자계약서 '광고·서비스 개별 신청' 가능 → 이 경우 스타터팩 혜택 없음 (사장님께 꼭 고지)", "스탠다드 유의사항 +\n· 상품은 첫 계약 시 선택한 기준으로 적용\n· 라이브 전 : 스탠다드 → 프리미엄 변경 가능\n· 라이브 후 : 변경 불가 (즉시할인을 추가해도 코펀딩 대상 아님)"], ["대상 확인 방법", "· 전자계약서에서 필수 상품 선택 시 '신규 성장 패키지' 특약이 뜨는지 확인 (안 뜨면 조건 미충족)", "스탠다드와 동일"]]}}</script>
+<script>
+(function(){
+"use strict";
+var D = JSON.parse(document.getElementById('data').textContent);
+var V = "slim-fold1";
+var FOLD=""; if(V.indexOf("-fold")>0){FOLD=V.split("-fold")[1];V=V.split("-fold")[0];}
+var SOFT=(V==="soft"||V==="slim"); if(SOFT){document.body.classList.add("soft");if(V==="slim")document.body.classList.add("slim");V="";}
+if(V){document.body.classList.add("calm","v-"+V);}
+var EMO=/[\p{Extended_Pictographic}\uFE0F\u200D]+\s*/gu;
+function E(s){return V?String(s).replace(EMO,""):String(s);}
+function EE(s){return String(s).replace(EMO,"");}
+var PAGES = [["flow","📞 통화 흐름"],["react","🧐 반응별 대응"],["pack","📋 스타터팩 핵심 정보"]];
+var FILL = {"대리점명":"agency","담당자명":"manager","본인 연락처":"phone"};
+var MANUAL = ["ㅇㅇ일 뒤","오늘 오후 ㅇㅇ시 / 내일 오전"];
+var S = {page:"flow", step:0, rcat:"전체", rq:"", rsel:(D.reactions.index[0]||{}).id, plan:"cmp", rfold:false, ocat:null, qopen:false};
+var CATCOL=[["#f2705f","#d2382b"],["#f0a030","#c9700f"],["#3fbf8e","#13845a"],["#5a9cf5","#2765cc"],["#9d7cf6","#6a42d8"],["#f06fa8","#c93a7c"],["#3cc0bb","#0e7f7b"]];
+function catLabel(c){return esc(EE(c));}
+function isDark(){try{return window.matchMedia("(prefers-color-scheme: dark)").matches;}catch(e){return false;}}
+var MUTED=[["#bf7469","#9c4d43"],["#bf9a5a","#8f6a2b"],["#6fa68c","#3f7a62"],["#7b9cc4","#4a6e99"],["#9b8bc2","#6b5a9a"],["#c18aa3","#97586f"],["#6fa8a5","#3f7f7c"]];
+var SOFTCOL=[["#d27468","#ad4f45"],["#c99a4f","#9d6c25"],["#6fae92","#47846a"],["#7ca0cd","#4f76a6"],["#9d8dcb","#7160a3"],["#cc8aa6","#a15f7b"],["#8e98a4","#667282"]];
+function catColor(c){if(V==="mint"||V==="list") return ["#2ac1bc","#0e7f7b"];var cats=D.reactions.index.map(function(x){return x.cat;}).filter(function(v,i,a){return a.indexOf(v)===i;});return (SOFT?SOFTCOL:V==='muted'?MUTED:CATCOL)[cats.indexOf(c)%CATCOL.length];}
+
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function one(s){return String(s).replace(/\s+/g," ").trim();}
+function val(id){return ($(id).value||"").trim();}
+function rich(s){
+  return esc(s).replace(/\[([^\[\]\n]+)\]/g,function(m,k){
+    if(FILL.hasOwnProperty(k)){var v=val(FILL[k]);
+      return v?'<mark class="ph ok">'+esc(v)+'</mark>':'<mark class="ph">['+k+']</mark>';}
+    if(MANUAL.indexOf(k)>=0) return '<mark class="ph">['+k+']</mark>';
+    return m;});
+}
+function plain(s){
+  return String(s).replace(/\[([^\[\]\n]+)\]/g,function(m,k){
+    if(FILL.hasOwnProperty(k)){var v=val(FILL[k]); return v||m;} return m;});
+}
+function copy(text,btn){
+  function done(){var o=btn.textContent;btn.textContent="복사됨 ✓";setTimeout(function(){btn.textContent=o;},1500);}
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(done,fallback);}else{fallback();}
+  function fallback(){var t=document.createElement("textarea");t.value=text;t.style.position="fixed";t.style.opacity="0";
+    document.body.appendChild(t);t.select();try{document.execCommand("copy");done();}catch(e){}t.remove();}
+}
+
+/* ───── 내비게이션 ───── */
+function renderNav(){
+  $("nav").innerHTML=PAGES.map(function(p){
+    return '<button data-p="'+p[0]+'" class="'+(S.page===p[0]?"on":"")+'">'+esc(E(p[1]))+'</button>';}).join("");
+  Array.prototype.forEach.call($("nav").querySelectorAll("button"),function(b){
+    b.onclick=function(){go(b.getAttribute("data-p"));};});
+}
+function go(p){S.page=p;try{history.replaceState(null,"","#"+p);}catch(e){}render();window.scrollTo(0,0);}
+function goReact(id){S.rcat="전체";S.rq="";S.rsel=id;S.rfold=true;S.ocat=null;go("react");}
+
+
+/* 통화 흐름 ① : 구분점(민트 동그라미) 목록 */
+function bulletHtml(t){
+  var out="",ul=false,m;
+  String(t).split("\n").forEach(function(raw){
+    var l=raw.trim(); if(!l) return;
+    if((m=l.match(/^[·•]\s*(.*)$/))){ if(!ul){out+='<ul class="bl">';ul=true;} out+='<li>'+rich(m[1])+'</li>'; return;}
+    if((m=l.match(/^└\s*(.*)$/))){ if(!ul){out+='<ul class="bl">';ul=true;} out+='<li class="sub">'+rich(m[1])+'</li>'; return;}
+    if(ul){out+='</ul>';ul=false;} out+='<p>'+rich(l)+'</p>';});
+  if(ul) out+='</ul>'; return out;
+}
+/* 통화 흐름 ③ : 부정반응 / 긍정반응 구분 + 클릭 이동 */
+function stepIndexByMark(mark){
+  for(var i=0;i<D.flow.steps.length;i++){ if(D.flow.steps[i].name.trim().charAt(0)===mark) return i; }
+  return -1;
+}
+function reactHtml(t){
+  var intro=[], secs=[], cur=null;
+  String(t).split("\n").forEach(function(raw){
+    var l=raw.trim(); if(!l) return;
+    var m=l.match(/^\[(.+)\]$/);
+    if(m){cur={name:m[1],items:[]};secs.push(cur);return;}
+    if(!cur){intro.push(l);return;}
+    var im=l.match(/^[·•]\s*(.*)$/), body=im?im[1]:l, parts=body.split(/\s*→\s*/);
+    cur.items.push({text:parts[0],to:(parts[1]||"").trim()});
+  });
+  var h="";
+  if(intro.length) h+='<div class="rxintro">'+intro.map(function(l){
+    return '<p>'+esc(E(l)).replace(/(?:🧐\s*)?반응별 대응 시트탭/,'<button type="button" class="inlink" data-go="react">$&</button>')+'</p>';}).join("")+'</div>';
+  secs.forEach(function(sec){
+    var neg=sec.name.indexOf("부정")>=0, c=neg?SOFTCOL[0]:SOFTCOL[2];
+    var ids=sec.items.map(function(x){return x.to;}).filter(function(x){return /^R\d+$/.test(x);});
+    var small=ids.length?ids[0]+' ~ '+ids[ids.length-1]:(sec.items[0]&&sec.items[0].to?'클릭하면 이동':'');
+    h+='<div class="rgroup rxsec" style="--c1:'+c[0]+';--c2:'+c[1]+'"><div class="rghead"><span class="gp">'+esc(sec.name)+'</span><small>'+esc(small)+'</small></div>'+
+       '<div class="rxgrid'+(neg?"":" one")+'">'+sec.items.map(function(it){
+         var chip=it.to?'<span class="rxchip">'+esc(it.to)+'</span>':'';
+         return '<button type="button" class="gbtn rxrow" '+(it.to?'data-to="'+esc(it.to)+'"':'disabled')+'>'+chip+'<span class="rxt">'+esc(it.text)+'</span></button>';}).join("")+'</div></div>';
+  });
+  return h;
+}
+
+/* ───── 통화 흐름 ───── */
+function stepParts(name){
+  var n=one(name), m=n.match(/^([①②③④⑤⑥⑦⑧⑨])\s*(.*)$/);
+  if(m) return {no:"①②③④⑤⑥⑦⑧⑨".indexOf(m[1])+1, nm:m[2]};
+  return {no:"", ic:n.slice(0,2), nm:n.replace(/^\S+\s*/,"")};
+}
+function pageFlow(){
+  var f=D.flow, st=f.steps[S.step];
+  var h='<h2 class="title">'+esc(E(f.title))+'</h2>';
+  h+='<p class="sub">'+E('🟧 ')+'주황색 [ ] 칸은 상황에 맞게 채워서 사용하세요. 왼쪽 ‘내 정보’에 입력하면 자동으로 채워집니다.</p>';
+  h+='<div class="picker"><div class="plabel">통화 단계 선택</div><div class="steps">'+f.steps.map(function(s,i){
+      var p=stepParts(s.name);
+      return '<button class="gbtn sbtn'+(i===S.step?" on":"")+'" data-i="'+i+'"><span class="no">'+(p.no||(V?"7+":"✉"))+'</span><span class="nm">'+esc(p.nm)+'</span></button>';}).join("")+'</div></div>';
+  h+='<div class="link"><i></i></div>';
+  var sp=stepParts(st.name);
+  h+='<section class="detail"><div class="dhead"><span class="dtag">'+(sp.no?'STEP '+sp.no:'메시지')+'</span><h3 class="step">'+esc(sp.nm)+'</h3></div>';
+  if(st.goal) h+='<div class="goal"><b>목표</b> · '+esc(one(st.goal))+'</div>';
+  var isMsg=st.name.indexOf("후속 안내 메시지")>=0;
+  if(isMsg){
+    h+='<div class="box"><button class="gbtn copy" id="cpy">문구 복사</button><div id="msgtext">'+esc(plain(st.script))+'</div></div>';
+  } else {
+    var mk=st.name.trim().charAt(0);
+    if(mk==="①") h+='<div class="box list">'+bulletHtml(st.script)+'</div>';
+    else if(mk==="③") h+='<div class="rxwrap">'+reactHtml(st.script)+'</div>';
+    else h+='<div class="box">'+rich(st.script)+'</div>';
+  }
+  var ids=[],m,re=/→ (R\d+)/g; while((m=re.exec(st.script))){ if(ids.indexOf(m[1])<0) ids.push(m[1]); }
+  if(ids.length&&st.name.trim().charAt(0)!=="③"){
+    h+='<div class="glabel">바로가기 · 사장님 반응별 대응</div><div class="goto">'+ids.map(function(id){
+      var it=(D.reactions.index.filter(function(x){return x.id===id;})[0])||{label:"",cat:""};
+      var lab=it.label.replace(/\s*\(.*?\)/g,""), c=catColor(it.cat);
+      return '<button class="gbtn rbtn" data-r="'+id+'"><span class="rn" style="--c1:'+c[0]+';--c2:'+c[1]+'">'+id+'</span><span class="rt"><b>'+esc(lab)+'</b></span></button>';}).join("")+'</div>';
+  }
+  if(st.next||st.point){
+    h+='<div class="callouts">'+
+      (st.next?'<div class="callout info"><b>'+E('➡️ 다음 단계')+'</b>'+rich(st.next)+'</div>':'<div></div>')+
+      (st.point?'<div class="callout warn"><b>'+E('💡 포인트')+'</b>'+rich(st.point)+'</div>':'<div></div>')+'</div>';
+  }
+  h+='</section>';
+  $("main").innerHTML=h;
+  Array.prototype.forEach.call($("main").querySelectorAll(".sbtn"),function(b){
+    b.onclick=function(){S.step=+b.getAttribute("data-i");render();};});
+  Array.prototype.forEach.call($("main").querySelectorAll(".goto .rbtn"),function(b){
+    b.onclick=function(){goReact(b.getAttribute("data-r"));};});
+  var c=$("cpy"); if(c) c.onclick=function(){copy($("msgtext").textContent,c);};
+  Array.prototype.forEach.call($("main").querySelectorAll(".rxrow[data-to]"),function(b){
+    b.onclick=function(){var to=b.getAttribute("data-to");
+      if(/^R\d+$/.test(to)) goReact(to);
+      else{var i=stepIndexByMark(to.charAt(0)); if(i>=0){S.step=i;render();window.scrollTo(0,0);}}};});
+  Array.prototype.forEach.call($("main").querySelectorAll("[data-go=react]"),function(b){
+    b.onclick=function(){S.rcat="전체";S.rq="";go("react");};});
+}
+
+/* ───── 반응별 대응 ───── */
+function chev(o){return '<i class="chev'+(o?' o':'')+'"></i>';}
+function pageReact(){
+  var r=D.reactions, f=FOLD;
+  var cats=["전체"].concat(r.index.map(function(x){return x.cat;}).filter(function(v,i,a){return a.indexOf(v)===i;}));
+  var h='<h2 class="title">'+esc(E(r.title))+'</h2><p class="sub">통화 중 사장님 말씀에 맞는 버튼을 눌러 바로 확인하세요.</p>';
+  var sel=r.index.filter(function(x){return x.id===S.rsel;})[0]||{cat:"",label:"",tag:""};
+  if(f==="1"){cats=cats.slice(1); if(S.rcat==="전체"&&!S.rq) S.rcat=sel.cat||cats[0];}
+  if(f==="2"&&S.rfold){
+    var sc=catColor(sel.cat);
+    h+='<div class="picker"><div class="plabel">선택한 반응</div><div class="pbrow" style="--c1:'+sc[0]+';--c2:'+sc[1]+'"><span class="rn">'+esc(S.rsel)+'</span>'+
+       '<span class="pbt"><b>'+esc(sel.label)+'</b><span class="tg">'+esc(EE(sel.cat))+' · '+esc(sel.tag)+'</span></span>'+
+       '<button type="button" class="gbtn pbbtn" id="repick">다시 고르기 '+chev(true)+'</button></div></div>';
+  } else {
+    h+='<div class="picker">';
+    {
+      h+='<div class="plabel">'+(f?'':'1 · ')+'사장님 반응 분류</div><div class="cats" id="rcats">'+cats.map(function(c){
+        var cc=c==="전체"?null:catColor(c);
+        return '<button class="gbtn cbtn'+(c===S.rcat&&!(f==="1"&&S.rq)?" on":"")+'" data-c="'+esc(c)+'"'+(cc?' style="--on-top:'+cc[0]+';--on-bot:'+cc[1]+'"':'')+'>'+(cc?'<i class="dot"></i>':'')+esc(EE(c))+'</button>';}).join("")+
+        (f==="3"?'<button type="button" class="gbtn cbtn qtoggle" id="qtoggle">키워드로 찾기 '+chev(!!(S.qopen||S.rq))+'</button>':'')+'</div>';
+    }
+    var showQ=(f!=="3")||S.qopen||S.rq;
+    h+='<div id="qwrap"'+(showQ?'':' style="display:none"')+'><div class="plabel">'+(f?'':'2 · ')+'키워드로 찾기</div><input class="search" id="rq" placeholder="예: 수수료, 쿠팡, 월세" value="'+esc(S.rq)+'"></div>';
+    h+='<div class="plabel">'+(f?'':'3 · ')+'반응 선택</div><div class="rgroups'+(f==="1"?' acc':'')+'" id="rgrid"></div></div>';
+  }
+  h+='<div class="link"><i></i></div><section class="detail" id="rdetail"></section>';
+  $("main").innerHTML=h;
+  if($("rcats")) Array.prototype.forEach.call($("rcats").querySelectorAll(".cbtn[data-c]"),function(b){
+    b.onclick=function(){S.rcat=b.getAttribute("data-c");pageReact();};});
+  if($("rq")) $("rq").oninput=function(){S.rq=this.value;drawReact();};
+  if($("qtoggle")) $("qtoggle").onclick=function(){
+    S.qopen=!(S.qopen||S.rq); if(!S.qopen){S.rq="";$("rq").value="";}
+    $("qwrap").style.display=S.qopen?"":"none"; this.querySelector(".chev").className="chev"+(S.qopen?" o":"");
+    if(S.qopen) $("rq").focus(); else drawReact();};
+  if($("repick")) $("repick").onclick=function(){S.rfold=false;pageReact();};
+  drawReact();
+}
+function drawReact(){
+  var r=D.reactions, f=FOLD, q=S.rq.trim().toLowerCase();
+  var shown=r.index.filter(function(x){
+    return (f==="1"?(q||x.cat===S.rcat):(S.rcat==="전체"||x.cat===S.rcat))&&(!q||(x.label+x.tag).toLowerCase().indexOf(q)>=0);})
+    .sort(function(a,b){return parseInt(a.id.slice(1),10)-parseInt(b.id.slice(1),10);});
+  if(shown.length&&!shown.some(function(x){return x.id===S.rsel;})) S.rsel=shown[0].id;
+  if($("rgrid")&&f==="1"){
+    var tc=q?["#6fb0ac","#45827f"]:catColor(S.rcat);
+    $("rgrid").innerHTML=shown.length?'<div class="rtray" style="--c1:'+tc[0]+';--c2:'+tc[1]+'"><div class="rgitems">'+shown.map(function(x){
+      var c=catColor(x.cat);
+      return '<button class="gbtn rbtn'+(x.id===S.rsel?" on":"")+'" data-r="'+x.id+'" title="'+esc(x.tag)+'" style="--c1:'+c[0]+';--c2:'+c[1]+'"><span class="rn">'+x.id+'</span><span class="rt"><b>'+esc(x.label)+'</b></span></button>';}).join("")+'</div></div>'
+      :'<div class="empty">조건에 맞는 반응이 없습니다.</div>';
+    Array.prototype.forEach.call($("rgrid").querySelectorAll(".rbtn"),function(b){
+      b.onclick=function(){S.rsel=b.getAttribute("data-r");drawReact();};});
+    if($("rcats")) Array.prototype.forEach.call($("rcats").querySelectorAll(".cbtn[data-c]"),function(b){
+      if(q) b.classList.remove("on"); else b.classList.toggle("on",b.getAttribute("data-c")===S.rcat);});
+  } else if($("rgrid")){
+    var groups=[];
+    shown.forEach(function(x){var g=groups.filter(function(g){return g.cat===x.cat;})[0];
+      if(!g){g={cat:x.cat,items:[]};groups.push(g);} g.items.push(x);});
+    $("rgrid").innerHTML=groups.length?groups.map(function(g){
+      var c=catColor(g.cat), a=g.items[0].id, l=g.items[g.items.length-1].id, rng=(a===l?a:a+' ~ '+l);
+      var open=(f!=="1")||!!q||S.ocat===g.cat;
+      var head=f==="1"
+        ?'<button type="button" class="rghead fh" data-cat="'+esc(g.cat)+'"><span class="gp">'+catLabel(g.cat)+'</span><small>'+rng+' · '+g.items.length+'개</small>'+chev(open)+'</button>'
+        :'<div class="rghead"><span class="gp">'+catLabel(g.cat)+'</span><small>'+rng+'</small></div>';
+      var body=open?'<div class="rgitems">'+g.items.map(function(x){
+        return '<button class="gbtn rbtn'+(x.id===S.rsel?" on":"")+'" data-r="'+x.id+'" data-cat="'+esc(x.cat)+'" title="'+esc(x.tag)+'"><span class="rn">'+x.id+'</span><span class="rt"><b>'+esc(x.label)+'</b><span class="tg">'+esc(x.tag)+'</span></span></button>';}).join("")+'</div>':'';
+      return '<div class="rgroup'+(f==="1"?' fold'+(open?' open':''):'')+'" style="--c1:'+c[0]+';--c2:'+c[1]+'">'+head+body+'</div>';}).join("")
+      :'<div class="empty">조건에 맞는 반응이 없습니다.</div>';
+    Array.prototype.forEach.call($("rgrid").querySelectorAll(".rbtn"),function(b){
+      b.onclick=function(){S.rsel=b.getAttribute("data-r");
+        if(f==="1") S.ocat=b.getAttribute("data-cat");
+        if(f==="2"){S.rfold=true;pageReact();window.scrollTo(0,0);} else drawReact();};});
+    Array.prototype.forEach.call($("rgrid").querySelectorAll(".fh"),function(b){
+      b.onclick=function(){var c=b.getAttribute("data-cat"); S.ocat=(S.ocat===c)?"":c; drawReact();};});
+  }
+  var card=shown.length?r.cards[S.rsel]:null, d="";
+  if(card){
+    var it=r.index.filter(function(x){return x.id===S.rsel;})[0]||{cat:""}, dc=catColor(it.cat);
+    $("rdetail").style.setProperty("--mint",dc[0]);$("rdetail").style.setProperty("--mint-dk",isDark()?dc[0]:dc[1]);
+    d+='<div class="dhead"><span class="dtag">'+S.rsel+'</span><span class="dtag">'+esc(EE(it.cat))+'</span><h3 class="step">'+esc(card.header.split("·")[0].trim())+'</h3></div>';
+    if(f==="4") d+='<div class="foldbar"><button type="button" class="gbtn fbtn" id="fall">전체 펼치기</button></div>';
+    card.steps.forEach(function(s,i){
+      var pt=s[0].indexOf("💡")===0;
+      if(f==="4"){
+        d+='<details class="fstep'+(pt?' pt':'')+'"'+(i===0?' open':'')+'><summary><span class="fl">'+esc(pt?E(s[0]):s[0])+'</span>'+chev(false)+'</summary><div class="fb">'+rich(s[1])+'</div></details>';
+      } else if(pt) d+='<div class="callout warn" style="margin:12px 0"><b>'+esc(E(s[0]))+'</b>'+rich(s[1])+'</div>';
+      else d+='<div class="box"><h4>'+esc(s[0])+'</h4>'+rich(s[1])+'</div>';});
+  } else { d='<div class="empty">조건에 맞는 반응이 없습니다. 분류나 키워드를 바꿔 보세요.</div>'; $("rdetail").style.removeProperty("--mint"); $("rdetail").style.removeProperty("--mint-dk"); }
+  $("rdetail").innerHTML=d;
+  if($("fall")) $("fall").onclick=function(){
+    var ds=$("rdetail").querySelectorAll("details.fstep"), anyClosed=false;
+    Array.prototype.forEach.call(ds,function(x){if(!x.open) anyClosed=true;});
+    Array.prototype.forEach.call(ds,function(x){x.open=anyClosed;});
+    this.textContent=anyClosed?"전체 접기":"전체 펼치기";};
+}
+
+/* ───── 스타터팩 ───── */
+var ICONS=[["구성","🧩"],["중개이용료","💰"],["우리가게클릭","📣"],["즉시할인","🏷️"],["가입","📝"],["기간","📅"],["유지","🔒"],["불가","⚠️"],["확인","🔍"]];
+function iconFor(k){return "";for(var i=0;i<ICONS.length;i++){if(k.indexOf(ICONS[i][0])>=0) return ICONS[i][1];}return "•";}
+function bold(s){return s.replace(/(최대 [\d,]+만원|[\d,]+원|\d+%|\d+일|\d+종|생애 1회|불가|제외|누락)/g,"<strong>$1</strong>");}
+function cellHtml(t){
+  var out="", ul=false;
+  function closeUl(){if(ul){out+="</ul>";ul=false;}}
+  String(t).split("\n").forEach(function(raw){
+    var l=EE(raw).trim(); if(!l) return;
+    var m=l.match(/^(스탠다드 (?:조건|유의사항)) \+$/);
+    if(m){closeUl(); out+='<span class="pill">'+esc(m[1])+' + 추가</span>'; return;}
+    if(/^→/.test(l)){closeUl(); out+='<p class="tip">'+esc(l)+'</p>'; return;}
+    if(!ul){out+="<ul>";ul=true;}
+    var note=/^(※|\*)/.test(l), none=(l==="없음"), txt=l.replace(/^[·•]\s?/,"");
+    out+='<li'+(note?' class="note"':none?' class="none"':'')+'>'+(note||none?esc(txt):bold(esc(txt)))+'</li>';
+  });
+  closeUl(); return out;
+}
+function pagePack(){
+  var p=D.pack, std=p.header[1], prm=p.header[2];
+  var h='<h2 class="title">'+esc(E(p.title))+'</h2>';
+  if(p.meta) h+='<div class="meta">'+esc(EE(p.meta))+'</div>';
+  h+='<div class="picker"><div class="plabel">보기 방식 선택</div><div class="seg" id="seg">'+
+     '<button class="gbtn s-cmp'+(S.plan==="cmp"?" on":"")+'" data-p="cmp">나란히 비교</button>'+
+     '<button class="gbtn s-std'+(S.plan==="std"?" on":"")+'" data-p="std">'+esc(std)+'</button>'+
+     '<button class="gbtn s-prm'+(S.plan==="prm"?" on":"")+'" data-p="prm">'+esc(prm)+'</button></div></div>';
+  h+='<div class="link"><i></i></div>';
+  var cls=S.plan==="std"?"std":(S.plan==="prm"?"prm":"");
+  h+='<section class="detail '+cls+(S.plan==="cmp"?"":" one")+'">';
+  if(S.plan==="cmp"){
+    h+='<div class="cmp-head"><div class="h-k">구분</div><div class="h-std">'+esc(std)+'</div><div class="h-prm">'+esc(prm)+'</div></div>';
+    p.rows.forEach(function(r){
+      var same=r[2].trim()==="스탠다드와 동일";
+      h+='<div class="prow"><div class="k"><span class="ic">'+iconFor(r[0])+'</span><span>'+esc(one(r[0]))+'</span></div>';
+      if(same) h+='<div class="cell both"><span class="pill same">'+esc(std)+' · '+esc(prm)+' 동일</span>'+cellHtml(r[1])+'</div>';
+      else h+='<div class="cell std" data-l="'+esc(std)+'">'+cellHtml(r[1])+'</div><div class="cell prm" data-l="'+esc(prm)+'">'+cellHtml(r[2])+'</div>';
+      h+='</div>';});
+  } else {
+    var isP=S.plan==="prm";
+    h+='<div class="dhead"><span class="dtag" style="'+(isP?'color:var(--prm);background:var(--prm-bg);border-color:var(--prm-bd)':'')+'">'+esc(isP?prm:std)+'</span><h3 class="step">'+esc(isP?prm:std)+' 정리</h3></div>';
+    p.rows.forEach(function(r){
+      var same=r[2].trim()==="스탠다드와 동일", txt=isP?(same?r[1]:r[2]):r[1];
+      h+='<div class="prow"><div class="k"><span class="ic">'+iconFor(r[0])+'</span><span>'+esc(one(r[0]))+'</span></div>'+
+         '<div class="cell wide '+(isP?"prm":"std")+'">'+(isP&&same?'<span class="pill same">'+esc(std)+'와 동일</span>':'')+cellHtml(txt)+'</div></div>';});
+  }
+  h+='</section>';
+  $("main").innerHTML=h;
+  Array.prototype.forEach.call($("seg").querySelectorAll(".gbtn"),function(b){
+    b.onclick=function(){S.plan=b.getAttribute("data-p");pagePack();};});
+}
+
+function render(){
+  renderNav();
+  if(S.page==="react") pageReact(); else if(S.page==="pack") pagePack(); else pageFlow();
+}
+["agency","manager","phone"].forEach(function(id){
+  $(id).addEventListener("input",function(){
+    if(S.page==="flow") pageFlow(); else if(S.page==="react") drawReact();});
+});
+var hp=(location.hash||"").replace("#","");
+if(PAGES.some(function(p){return p[0]===hp;})) S.page=hp;
+render();
+})();
+</script>
+</body>
+</html>
