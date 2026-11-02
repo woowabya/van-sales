@@ -600,10 +600,11 @@ mark{background:#ffe27a;color:#1c2430;border-radius:4px;padding:0 1px}
 .sdg:hover,.sdg.hot{filter:brightness(.86) saturate(1.15)}
 .ol{fill:none;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 .ol.bg{stroke:rgba(10,30,35,.45);stroke-width:4.6}
-.ol.sel,.ol.hit{stroke:#2cf2d2;stroke-width:2.6;filter:drop-shadow(0 0 2px #2cf2d2) drop-shadow(0 0 7px rgba(44,242,210,.95))}
-.ol.sel{animation:selBlink 1s ease-in-out infinite}
-@keyframes selBlink{0%,100%{opacity:1}50%{opacity:.25}}
-@media (prefers-reduced-motion:reduce){.ol.sel{animation:none}}
+.ol.sel,.ol.hit{stroke:#6f7a88;stroke-width:2.6;filter:drop-shadow(0 0 2px #6f7a88) drop-shadow(0 0 6px rgba(111,122,136,.9))}
+.fl.sel{fill:#6f7a88;stroke:#6f7a88;stroke-width:.9;stroke-linejoin:round;pointer-events:none;animation:flBlink 1s ease-in-out infinite;filter:drop-shadow(0 0 5px rgba(111,122,136,.85))}
+@keyframes flBlink{0%,100%{opacity:.95}50%{opacity:.18}}
+@media (prefers-color-scheme: dark){.fl.sel{fill:#c3cad3;stroke:#c3cad3;filter:drop-shadow(0 0 5px rgba(195,202,211,.8))}.ol.sel,.ol.hit{stroke:#c3cad3;filter:drop-shadow(0 0 2px #c3cad3) drop-shadow(0 0 6px rgba(195,202,211,.85))}}
+@media (prefers-reduced-motion:reduce){.fl.sel{animation:none;opacity:.8}}
 .mlab text{font-size:15px;font-weight:800;fill:var(--maplab);text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--maplabst);stroke-width:3px;stroke-linejoin:round}
 .mtip{display:none;position:absolute;pointer-events:none;z-index:5;background:#1c2430;color:#fff;padding:10px 12px;border-radius:14px;width:max-content;max-width:300px;box-shadow:0 12px 28px -10px rgba(0,0,0,.55);font-size:12.5px;line-height:1.5}
 .mtip .th{display:flex;align-items:center;gap:10px;margin-bottom:7px}.mtip .th b{font-size:14px}
@@ -1149,7 +1150,7 @@ function underHtml(hitSd,selSd){
   var O=D.map.outlines||{}, h="";
   function one(sd,cls){return '<path class="ol bg" d="'+O[sd]+'"/><path class="ol '+cls+'" d="'+O[sd]+'"/>';}
   hitSd.forEach(function(sd){if(O[sd]) h+=one(sd,"hit");});
-  if(selSd&&O[selSd]) h+=one(selSd,"sel");
+  if(selSd&&MAPSD&&MAPSD[selSd]) h+='<path class="fl sel" d="'+MAPSD[selSd].join("")+'"/>';
   return h;
 }
 function drawRegion(){
