@@ -552,6 +552,9 @@ mark.ph.ok{background:var(--ok-bg);color:var(--ok-tx)}
 .nav .subnav button{padding:9px 12px;font-size:13.5px;margin-bottom:6px;border-radius:13px}
 .nav>button::before{content:attr(data-n);flex:none;min-width:18px;font-size:11px;font-weight:800;letter-spacing:.3px;font-variant-numeric:tabular-nums;opacity:.7}
 .nav>button.on::before{color:var(--mint-dk);opacity:.85}
+.nav .newb{align-self:flex-start;margin:-5px 0 0 -2px;padding:1px 5px 2px;border-radius:999px;font-style:normal;font-size:9px;font-weight:900;letter-spacing:.3px;line-height:1.2;color:#fff;background:#ee3d34;box-shadow:0 0 0 1.5px rgba(255,255,255,.9),0 0 6px 1px rgba(238,61,52,.7);animation:newBlink 1s ease-in-out infinite}
+@keyframes newBlink{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion: reduce){.nav .newb{animation:none}}
 .nav>button{font-size:13px;letter-spacing:-.3px;gap:6px;padding-left:12px;padding-right:10px;word-break:keep-all;white-space:nowrap}
 .nav .subnav button{font-size:13.5px}
 .rpbody{margin:0 0 8px}
@@ -674,7 +677,7 @@ mark{background:#ffe27a;color:#1c2430;border-radius:4px;padding:0 1px}
           <small>입력한 내용은 이 화면에서만 쓰이며 저장·전송되지 않습니다. 새로고침하면 사라집니다.</small>
         </div>
       </div>
-      <button type="button" id="nbPack" data-n="03"><span class="nl">스타터팩 핵심 정보</span></button>
+      <button type="button" id="nbPack" data-n="03"><span class="nl">스타터팩 핵심 정보</span><i class="newb">NEW</i></button>
     </nav>
     <div class="modewrap">
       <div class="mlabel">화면 모드</div>
