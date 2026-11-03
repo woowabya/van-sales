@@ -592,14 +592,14 @@ mark.ph.ok{background:var(--ok-bg);color:var(--ok-tx)}
 mark{background:#ffe27a;color:#1c2430;border-radius:4px;padding:0 1px}
 
 /* ───── 불가지역 지도 ───── */
-:root{--map0:#e6ebee;--maplab:rgba(20,30,40,.62);--maplabst:rgba(255,255,255,.75)}
-@media (prefers-color-scheme: dark){:root{--map0:#2b3239;--maplab:rgba(255,255,255,.7);--maplabst:rgba(0,0,0,.55)}}
+:root{--map-hot:238,100,86;--map0:#e6ebee;--maplab:rgba(20,30,40,.62);--maplabst:rgba(255,255,255,.75)}
+@media (prefers-color-scheme: dark){:root{--map-hot:238,138,126;--map0:#2b3239;--maplab:rgba(255,255,255,.7);--maplabst:rgba(0,0,0,.55)}}
 .rgwrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start;margin:0 0 14px}
 .mapbox{position:relative;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:12px 12px 10px}
 .kmap{display:block;width:100%;height:auto;max-height:640px}
-.sdg .mp{fill:rgba(var(--chg-glow),var(--a,0));stroke:rgba(var(--chg-glow),var(--a,0));stroke-width:1.8;stroke-linejoin:round;fill-rule:nonzero;cursor:pointer}
+.sdg .mp{fill:rgba(var(--map-hot),var(--a,0));stroke:rgba(var(--map-hot),var(--a,0));stroke-width:1.8;stroke-linejoin:round;fill-rule:nonzero;cursor:pointer}
 @supports (color:color-mix(in srgb,red 50%,blue)){
-  .sdg .mp{fill:color-mix(in srgb,rgb(var(--chg-glow)) var(--p,0%),var(--map0));stroke:color-mix(in srgb,rgb(var(--chg-glow)) var(--p,0%),var(--map0))}}
+  .sdg .mp{fill:color-mix(in srgb,rgb(var(--map-hot)) var(--p,0%),var(--map0));stroke:color-mix(in srgb,rgb(var(--map-hot)) var(--p,0%),var(--map0))}}
 .sdg.z .mp{fill:var(--map0);stroke:var(--map0)}
 .sdg:hover,.sdg.hot{filter:brightness(.86) saturate(1.15)}
 .ol{fill:none;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
@@ -621,8 +621,8 @@ mark{background:#ffe27a;color:#1c2430;border-radius:4px;padding:0 1px}
 .mtip .tf{margin-top:8px;font-size:11px;opacity:.7}
 .mtip .tz{margin-left:8px;opacity:.85}
 .mleg{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 2px;font-size:12px;color:var(--muted)}
-.mleg i.grad{display:inline-block;width:120px;height:10px;border-radius:999px;background:linear-gradient(90deg,rgba(var(--chg-glow),.2),rgba(var(--chg-glow),.95))}
-@supports (color:color-mix(in srgb,red 50%,blue)){.mleg i.grad{background:linear-gradient(90deg,color-mix(in srgb,rgb(var(--chg-glow)) 20%,var(--map0)),color-mix(in srgb,rgb(var(--chg-glow)) 95%,var(--map0)))}}
+.mleg i.grad{display:inline-block;width:120px;height:10px;border-radius:999px;background:linear-gradient(90deg,rgba(var(--map-hot),.2),rgba(var(--map-hot),.95))}
+@supports (color:color-mix(in srgb,red 50%,blue)){.mleg i.grad{background:linear-gradient(90deg,color-mix(in srgb,rgb(var(--map-hot)) 20%,var(--map0)),color-mix(in srgb,rgb(var(--map-hot)) 95%,var(--map0)))}}
 .sdlist{display:flex;flex-direction:column;gap:2px}
 .sdrow{display:grid;grid-template-columns:110px 1fr 56px 14px;align-items:center;gap:10px;width:100%;padding:6px 8px;border:0;border-radius:10px;background:transparent;color:var(--text);font:inherit;font-size:13px;text-align:left;cursor:pointer}
 .sdrow:hover{background:rgba(42,193,188,.12)}
@@ -632,7 +632,7 @@ mark{background:#ffe27a;color:#1c2430;border-radius:4px;padding:0 1px}
 .sddet{margin:2px 0 10px 12px;padding:4px 8px 8px 14px;border-left:3px solid var(--chg-bd)}
 .sddet[hidden]{display:none}
 .sdrow .bar{height:8px;border-radius:999px;background:var(--map0);overflow:hidden}
-.sdrow .bar i{display:block;height:100%;border-radius:999px;background:rgb(var(--chg-glow))}
+.sdrow .bar i{display:block;height:100%;border-radius:999px;background:rgb(var(--map-hot))}
 .sdrow b{text-align:right;color:var(--chg)}
 .msrc{text-align:center;font-size:11.5px;color:var(--muted);margin-top:4px}
 .rgpanel{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:14px 16px;max-height:680px;overflow:auto}
@@ -1116,7 +1116,7 @@ function pageRegion(){
   var R=D.region, total=R.rows.length;
   var h='<h2 class="title">'+esc(E(R.title))+'</h2>';
   h+='<div class="meta">'+esc(R.meta)+' · 총 '+total.toLocaleString("ko-KR")+'개 읍·면·동 (모두 배민1플러스 불가)</div>';
-  h+='<div class="rg-note"><p>지도에서 시·도에 마우스를 올리면 불가지역이 바로 보여요. 누르면 읍·면·동까지, 검색하면 동네별로 확인할 수 있어요. 목록에 있는 곳은 모두 <b>배민1플러스 불가</b> 지역입니다.</p>'+
+  h+='<div class="rg-note"><p>지도에서 시·도에 마우스를 올리면 불가지역이 바로 보여요. 목록에 있는 곳은 모두 <b>배민1플러스 불가</b> 지역입니다.</p>'+
      '<p>※ 배민배달(배민1플러스)이 불가한 지역은 배민배달이 필수인 스타터팩도 가입할 수 없어요. 목록에 없는 동네는 표기가 다를 수 있으니 시·군·구까지 함께 검색해 보세요.</p></div>';
   h+='<div class="rg-bar"><input class="search" id="rgq" placeholder="예: 대산읍, 예산군, 철원" autocomplete="off" value="'+esc(S.rgq)+'"></div>';
   h+='<div class="rgwrap"><div class="mapbox" id="mapbox">'+mapHtml()+'<div class="mtip" id="mtip"></div>'+legendHtml()+
@@ -1183,7 +1183,7 @@ function drawRegion(){
     panel.innerHTML=out; $("munder").innerHTML=underHtml(hitSd,""); return;
   }
   var cnt=sdCounts(), mx=0; Object.keys(cnt).forEach(function(k){mx=Math.max(mx,cnt[k]);});
-  out='<div class="rgsel-h" id="rghead"><b>시·도별 한눈에 보기</b><button type="button" class="gbtn rgclr" id="rgclr" title="접기" aria-label="접기"'+(S.rgsel?'':' hidden')+'><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button></div><p class="rgsum">총 <b>'+D.region.rows.length.toLocaleString("ko-KR")+'곳</b> · 시·도를 누르면 아래로 읍·면·동 목록이 펼쳐지고, 지도에서 해당 지역이 깜빡여요.</p><div class="sdlist">'+
+  out='<div class="rgsel-h" id="rghead"><b>시·도별 한눈에 보기</b><button type="button" class="gbtn rgclr" id="rgclr" title="접기" aria-label="접기"'+(S.rgsel?'':' hidden')+'><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button></div><p class="rgsum">총 <b>'+D.region.rows.length.toLocaleString("ko-KR")+'곳</b> · 지역별로 누르면 읍·면·동 목록이 펼쳐집니다.</p><div class="sdlist">'+
     regGroups().slice().sort(function(a,b){return b.count-a.count;}).map(function(g){
       var on=(S.rgsel===g.name);
       return '<div class="sditem'+(on?' on':'')+'" data-sd="'+esc(g.name)+'"><button type="button" class="sdrow'+(on?' on':'')+'" aria-expanded="'+on+'"><span class="sn">'+esc(g.name)+'</span><span class="bar"><i style="width:'+Math.max(4,Math.round(g.count/mx*100))+'%"></i></span><b>'+g.count+'곳</b><span class="car"></span></button>'+
